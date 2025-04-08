@@ -6,10 +6,10 @@
                  [1X A [5XGAP[105X package for creating new [5XGAP[105X packages [101X
   
   
-                                     0.9.3
+                                     0.10.0
   
   
-                                3 December 2019
+                                20 November 2024
   
   
                                     Max Horn
@@ -17,12 +17,12 @@
   
   
   Max Horn
-      Email:    [7Xmailto:max.horn@uni-siegen.de[107X
+      Email:    [7Xmailto:mhorn@rptu.de[107X
       Homepage: [7Xhttps://www.quendi.de/math[107X
-      Address:  [33X[0;14YDepartment Mathematik[133X
-                [33X[0;14YUniversität Siegen[133X
-                [33X[0;14YWalter-Flex-Straße 3[133X
-                [33X[0;14Y57072 Siegen[133X
+      Address:  [33X[0;14YFachbereich Mathematik[133X
+                [33X[0;14YRPTU Kaiserslautern-Landau[133X
+                [33X[0;14YGottlieb-Daimler-Straße 48[133X
+                [33X[0;14Y67663 Kaiserslautern[133X
                 [33X[0;14YGermany[133X
   
   
@@ -33,8 +33,8 @@
   [1XContents (PackageMaker)[101X
   
   1 [33X[0;0YPackageMaker[133X
-    1.1 [33X[0;0YWhat is PackageMaker?[133X
-    1.2 [33X[0;0YUsing PackageMaker?[133X
+    1.1 [33X[0;0YWhat is [5XPackageMaker[105X?[133X
+    1.2 [33X[0;0YHow does one use [5XPackageMaker[105X?[133X
       1.2-1 PackageWizard
     1.3 [33X[0;0YWhat next?[133X
   

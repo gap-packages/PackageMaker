@@ -5,12 +5,15 @@ it easy and convenient to create new GAP packages.
 
 You can use it as follows:
 
-1. Download `PackageMaker` and extract it into a GAP `pkg` directory.
+1. Download `PackageMaker` and extract it into a GAP `pkg` directory. Or
+   just clone its git repository inside the `pkg` directory:
+
+        git clone https://github.com/gap-system/PackageMaker
 
 2. Start GAP, load the `PackageMaker` package and run the package wizard:
 
-    LoadPackage("PackageMaker");
-    PackageWizard();
+        LoadPackage("PackageMaker");
+        PackageWizard();
 
 3. Answer the questions about your new package. Afterwards, `PackageMaker`
    creates a new directory for the new package and populates it with all the
@@ -20,17 +23,19 @@ You can use it as follows:
 
 Next, you may wish to learn more about the purpose of the various
 generated files as well as the the meaning and correct usage of the
-entries in the `PackageInfo.g` file.
+entries in the `PackageInfo.g` file. Some relevant places for that:
 
-To do that, please consult the manual of the "Example" package as well
-as the comments in its PackageInfo.g file.
+- the GAP manual chapter on ["Using and Developing GAP Packages"](https://docs.gap-system.org/doc/ref/chap76_mj.html).
+- the [manual of the `Example`](https://gap-packages.github.io/example/doc/chap0_mj.html)
+- the comments in the [`PackageInfo.g` file](https://github.com/gap-packages/example/blob/master/PackageInfo.g)
+  of the `Example` package.
 
 ## Contact
 
 Please submit bug reports, suggestions for improvements and patches via
 the [issue tracker](https://github.com/gap-system/PackageMaker/issues).
 
-You can also contact me directly via [email](max@quendi.de).
+You can also contact me directly via [email](horn@mathematik.uni-kl.de).
 
 ## License
 

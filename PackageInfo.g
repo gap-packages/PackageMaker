@@ -10,8 +10,8 @@ SetPackageInfo( rec(
 
 PackageName := "PackageMaker",
 Subtitle := "A GAP package for creating new GAP packages",
-Version := "0.9.3",
-Date := "03/12/2019", # dd/mm/yyyy format
+Version := "0.10.0",
+Date := "20/11/2024", # dd/mm/yyyy format
 License := "GPL-2.0-or-later",
 
 Persons := [
@@ -20,16 +20,16 @@ Persons := [
     IsMaintainer := true,
     FirstNames := "Max",
     LastName := "Horn",
+    Email := "mhorn@rptu.de",
     WWWHome := "https://www.quendi.de/math",
-    Email := "max.horn@uni-siegen.de",
     PostalAddress := Concatenation(
-               "Department Mathematik\n",
-               "Universität Siegen\n",
-               "Walter-Flex-Straße 3\n",
-               "57072 Siegen\n",
+               "Fachbereich Mathematik\n",
+               "RPTU Kaiserslautern-Landau\n",
+               "Gottlieb-Daimler-Straße 48\n",
+               "67663 Kaiserslautern\n",
                "Germany" ),
-    Place := "Siegen",
-    Institution := "Universität Siegen",
+    Place := "Kaiserslautern, Germany",
+    Institution := "RPTU Kaiserslautern-Landau",
   ),
 ],
 
@@ -53,7 +53,7 @@ AbstractHTML   :=  "",
 PackageDoc := rec(
   BookName  := "PackageMaker",
   ArchiveURLSubset := ["doc"],
-  HTMLStart := "doc/chap0.html",
+  HTMLStart := "doc/chap0_mj.html",
   PDFFile   := "doc/manual.pdf",
   SixFile   := "doc/manual.six",
   LongTitle := "A GAP package for creating new GAP packages",
@@ -69,14 +69,8 @@ Dependencies := rec(
   ExternalConditions := [ ],
 ),
 
-AvailabilityTest := function()
-        return true;
-    end,
+AvailabilityTest := ReturnTrue,
 
 TestFile := "tst/testall.g",
 
-#Keywords := [ "TODO" ],
-
 ));
-
-

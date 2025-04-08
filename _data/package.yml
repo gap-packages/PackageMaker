@@ -1,6 +1,6 @@
 name: PackageMaker
-version: 0.9.3
-date: 2019-12-03
+version: 0.10.0
+date: 2024-11-20
 description: |
     A GAP package for creating new GAP packages
 
@@ -28,35 +28,35 @@ packageinfo: https://gap-system.github.io/PackageMaker/PackageInfo.g
 
 downloads:
     - name: .tar.gz
-      url: https://github.com/gap-system/PackageMaker/releases/download/v0.9.3/PackageMaker-0.9.3.tar.gz
+      url: https://github.com/gap-system/PackageMaker/releases/download/v0.10.0/PackageMaker-0.10.0.tar.gz
 
 abstract: |
 
 status: dev
-doc-html: doc/chap0.html
+doc-html: doc/chap0_mj.html
 doc-pdf: doc/manual.pdf
 citeas: |
     <p class='BibEntry'>
-    [<span class='BibKey'>Hor19</span>]   <b class='BibAuthor'>Horn, M.</b>,
+    [<span class='BibKey'>Hor24</span>]   <b class='BibAuthor'>Horn, M.</b>,
      <i class='BibTitle'>PackageMaker, A GAP package for creating new GAP packages,
-             Version 0.9.3</i>
-     (<span class='BibYear'>2019</span>)<br />
+             Version 0.10.0</i>
+     (<span class='BibYear'>2024</span>)<br />
     (<span class='BibNote'>GAP package</span>),
     <span class='BibHowpublished'><a href="https://gap-system.github.io/PackageMaker">https://gap-system.github.io/PackageMaker</a></span>.
     </p>
     
 
 bibtex: |
-    @misc{ PackageMaker0.9.3,
+    @misc{ PackageMaker,
       author =           {Horn, M.},
-      title =            {{PackageMaker},  A  GAP  package  for creating new GAP
-                          packages, {V}ersion 0.9.3},
-      month =            {Dec},
-      year =             {2019},
+      title =            {{PackageMaker},  {A  GAP  package for creating new GAP
+                          packages}, {V}ersion 0.10.0},
+      month =            {Nov},
+      year =             {2024},
       note =             {GAP package},
       howpublished =     {\href      {https://gap-system.github.io/PackageMaker}
-                          {\texttt{https://gap-system.github.io/}\discretionary
+                          {\texttt{https://gap\texttt{\symbol{45}}system.github.io/}\discretionary
                           {}{}{}\texttt{PackageMaker}}},
-      printedkey =       {Hor19}
+      printedkey =       {Hor24}
     }
 

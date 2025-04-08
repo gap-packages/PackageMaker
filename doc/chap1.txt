@@ -1,26 +1,68 @@
   
   [1X1 [33X[0;0YPackageMaker[133X[101X
   
-  [33X[0;0YTODO 1[133X
+  
+  [1X1.1 [33X[0;0YWhat is [5XPackageMaker[105X[101X[1X?[133X[101X
+  
+  [33X[0;0Y[5XPackageMaker[105X is a [5XGAP[105X package that makes it easy to create new [5XGAP[105X packages,
+  by  providing  a  [21Xwizard[121X  function  that  asks a few questions about the new
+  packages,  such  as  its  name and authors; and from that creates a complete
+  usable  skeleton  packages.  It  optionally  can  set  up  several  advanced
+  features, including:[133X
+  
+  [30X    [33X[0;6Ya git repository for use on GitHub;[133X
+  
+  [30X    [33X[0;6Ya simple C or C++ kernel extension, including a build system;[133X
+  
+  [30X    [33X[0;6Ycontinuous integration using Travis CI;[133X
+  
+  [30X    [33X[0;6Ycode coverage tracking;[133X
+  
+  [30X    [33X[0;6Y... and more.[133X
   
   
-  [1X1.1 [33X[0;0YWhat is PackageMaker?[133X[101X
+  [1X1.2 [33X[0;0YHow does one use [5XPackageMaker[105X[101X[1X?[133X[101X
   
-  [33X[0;0YTODO 2[133X
-  
-  
-  [1X1.2 [33X[0;0YUsing PackageMaker?[133X[101X
-  
-  [33X[0;0YTODO 3[133X
+  [33X[0;0YSimply load it, then invoke [10XPackageWizard()[110X and follow the instructions.[133X
   
   [1X1.2-1 PackageWizard[101X
   
   [33X[1;0Y[29X[2XPackageWizard[102X( [3Xarg[103X ) [32X function[133X
   
-  [33X[0;0YInteractively create a package skeleton[133X
+  [33X[0;0YInteractively  create  a package skeleton. You can abort by either answering
+  [21Xquit[121X or pressing [10XCtrl-D[110X[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XPackageWizard();[127X[104X
+    [4X[28XWelcome to the GAP PackageMaker Wizard.[128X[104X
+    [4X[28XI will now guide you step-by-step through the package[128X[104X
+    [4X[28Xcreation process by asking you some questions.[128X[104X
+    [4X[28X[128X[104X
+    [4X[28XWhat is the name of the package? SuperPackage[128X[104X
+    [4X[28XEnter a short (one sentence) description of your package: A super nice new package[128X[104X
+    [4X[28XShall I prepare your new package for GitHub? [Y/n] y[128X[104X
+    [4X[28XDo you want to use GitHubPagesForGAP? [Y/n] y[128X[104X
+    [4X[28XDo you want to use Travis and Codecov? [Y/n] y[128X[104X
+    [4X[28XI need to know the URL of the GitHub repository.[128X[104X
+    [4X[28XIt is of the form https://github/USER/REPOS.[128X[104X
+    [4X[28XWhat is USER (typically your GitHub username)? [mhorn][128X[104X
+    [4X[28X...[128X[104X
+  [4X[32X[104X
   
   
   [1X1.3 [33X[0;0YWhat next?[133X[101X
   
-  [33X[0;0YTODO 5[133X
+  [33X[0;0YSome suggestions for what to do next:[133X
+  
+  [30X    [33X[0;6Yedit the [11XREADME.md[111X file of your new package[133X
+  
+  [30X    [33X[0;6Yadd some actual functionality to it[133X
+  
+  [30X    [33X[0;6Yif you asked for a kernel extension, try to compile it[133X
+  
+  [30X    [33X[0;6Ytry loading your package[133X
+  
+  [30X    [33X[0;6Yadd some [10X.tst[110X test files[133X
+  
+  [30X    [33X[0;6Y...[133X
   
