@@ -10,16 +10,25 @@ You can use it as follows:
 
         git clone https://github.com/gap-packages/PackageMaker
 
-2. Start GAP, load the `PackageMaker` package and run the package wizard:
+Or, if you're familiar with `PackageManager`, you may want to install `PackageMaker` by `PackageManager`, which is easier to use and automatically installs packages for you by leveraging [PackageManager](https://github.com/gap-packages/PackageManager).
+
+        InstallPackage("PackageMaker");
+
+2. Start GAP, load the `PackageMaker` package:
 
         LoadPackage("PackageMaker");
+
+3. Run the package wizard:
+
         PackageWizard();
 
-3. Answer the questions about your new package. Afterwards, `PackageMaker`
+4. Answer the questions about your new package. Afterwards, `PackageMaker`
    creates a new directory for the new package and populates it with all the
    files needed for a basic package.
 
-4. Move the newly created package directory to a suitable place.
+5. Move the newly created package directory to a suitable place.
+
+> Note: The `PackageWizard` function generates your new package in the current directory, not automatically in the `pkg` directory. You will need to manually move the generated directory to the `pkg` folder in your GAP installation.
 
 Next, you may wish to learn more about the purpose of the various
 generated files as well as the the meaning and correct usage of the
