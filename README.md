@@ -10,7 +10,7 @@ You can use it as follows:
 
         git clone https://github.com/gap-packages/PackageMaker
 
-Or, if you're familiar with `PackageManager`, you may want to install `PackageMaker` by `PackageManager`, which is easier to use and automatically installs packages for you by leveraging [PackageManager](https://github.com/gap-packages/PackageManager).
+Or, you may want to install `PackageMaker` using the [PackageManager](https://github.com/gap-packages/PackageManager) GAP package by typing `LoadPackage("PackageManager"); InstallPackage("PackageMaker");` in GAP.
 
         InstallPackage("PackageMaker");
 
