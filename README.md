@@ -8,7 +8,7 @@ You can use it as follows:
 1. Download `PackageMaker` and extract it into a GAP `pkg` directory. Or
    just clone its git repository inside the `pkg` directory:
 
-        git clone https://github.com/gap-system/PackageMaker
+        git clone https://github.com/gap-packages/PackageMaker
 
 2. Start GAP, load the `PackageMaker` package and run the package wizard:
 
@@ -33,9 +33,9 @@ entries in the `PackageInfo.g` file. Some relevant places for that:
 ## Contact
 
 Please submit bug reports, suggestions for improvements and patches via
-the [issue tracker](https://github.com/gap-system/PackageMaker/issues).
+the [issue tracker](https://github.com/gap-packages/PackageMaker/issues).
 
-You can also contact me directly via [email](horn@mathematik.uni-kl.de).
+You can also contact me directly via [email](mhorn@rptu.de).
 
 ## License
 
