@@ -48,14 +48,14 @@
 #! Welcome to the GAP PackageMaker Wizard.
 #! I will now guide you step-by-step through the package
 #! creation process by asking you some questions.
-#! 
+#!
 #! What is the name of the package? SuperPackage
 #! Enter a short (one sentence) description of your package: A super nice new package
 #! Shall I prepare your new package for GitHub? [Y/n] y
 #! Do you want to use GitHubPagesForGAP? [Y/n] y
 #! Do you want to use Travis and Codecov? [Y/n] y
 #! I need to know the URL of the GitHub repository.
-#! It is of the form https://github/USER/REPOS.
+#! It is of the form https://github.com/USER/REPOS.
 #! What is USER (typically your GitHub username)? [mhorn]
 #! ...
 #! @EndLogSession

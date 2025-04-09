@@ -347,7 +347,7 @@ BindGlobal( "CreateGitRepository", function(dir, github)
 
     stdin := InputTextUser();
     stdout := OutputTextUser();
-    
+
     RunGit := function(args, errorMsg)
         local res;
         res := Process(dir, cmd_full, stdin, stdout, args);
@@ -536,7 +536,7 @@ InstallGlobalFunction( PackageWizard, function()
         github.ci := AskYesNoQuestion("Do you want to use GitHubActions and Codecov?" : default := true);
 
         Print("I need to know the URL of the GitHub repository.\n");
-        Print("It is of the form https://github/USER/REPOS.\n");
+        Print("It is of the form https://github.com/USER/REPOS.\n");
         github.username := AskQuestion("What is USER (typically your GitHub username)?"
                             : isValid := n -> Length(n) > 0 and n[1] <> '-' and
                                     ForAll(n, c -> c = '-' or c in alphanum),
