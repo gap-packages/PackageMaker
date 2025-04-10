@@ -30,6 +30,7 @@ Alternatively you could install `PackageMaker` using the [PackageManager](https:
 5. Move the newly created package directory to a suitable place.
 
 > Note: The `PackageWizard` function generates your new package in the current directory, not automatically in the `pkg` directory. You will need to manually move the generated directory to the `pkg` folder in your GAP installation.
+Or just start GAP inside the `pkg` directory.
 
 Next, you may wish to learn more about the purpose of the various
 generated files as well as the the meaning and correct usage of the
