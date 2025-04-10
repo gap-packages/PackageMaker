@@ -47,5 +47,5 @@ this package or see the FSF's own site.
 
 As a special exception to the terms of the GNU General Public License, you
 are granted permission to distribute a package you generated using
-`PackageMaker` under any open source license recognized that is by the [Open
-Source Initiative (OSI)](https://opensource.org).
+`PackageMaker` under any open source license recognized as such by the
+[Open Source Initiative (OSI)](https://opensource.org).
