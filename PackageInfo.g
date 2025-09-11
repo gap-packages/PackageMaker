@@ -16,12 +16,13 @@ License := "GPL-2.0-or-later",
 
 Persons := [
   rec(
+    LastName := "Horn",
+    FirstNames := "Max",
     IsAuthor := true,
     IsMaintainer := true,
-    FirstNames := "Max",
-    LastName := "Horn",
     Email := "mhorn@rptu.de",
     WWWHome := "https://www.quendi.de/math",
+    GitHubUsername := "fingolfin",
     PostalAddress := Concatenation(
                "Fachbereich Mathematik\n",
                "RPTU Kaiserslautern-Landau\n",
