@@ -719,6 +719,7 @@ end
         fi;
         TranslateTemplate(fail, ".codecov.yml", pkginfo );
         CopyTemplate(fail, ".github/workflows/CI.yml", pkginfo);
+        CopyTemplate(fail, ".github/workflows/release.yml", pkginfo);
     fi;
 
     #
