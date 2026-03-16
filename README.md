@@ -29,7 +29,15 @@ You can use it as follows:
 
 5. Move the newly created package directory to a suitable place.
 
-> Note: The `PackageWizard` function generates your new package in the current directory, not automatically in the `pkg` directory. You will need to manually move the generated directory to the `pkg` folder in your GAP installation.
+> Note: The `PackageWizard` function generates your new package in the current
+> directory. For GAP to be able to load your new package, it must be in one of
+> the GAP's package search directories. For example, inside the `pkg`
+> directory of your GAP installation, or inside a directory `~/.gap/pkg` in
+> your home directory. If your package is not already in one of these
+> locations, either move it there; or instruct GAP to search in the current
+> directory for packages, e.g. by running it via `gap --packagedirs .` from
+> command line (requires at least GAP 4.15).
+
 Or just start GAP inside the `pkg` directory.
 
 Next, you may wish to learn more about the purpose of the various
