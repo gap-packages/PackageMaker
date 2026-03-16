@@ -292,20 +292,14 @@ end
 end );
 
 BindGlobal( "CreateGitRepository", function(dir, github)
-    local path, stdin, stdout, cmd_full, RunGit, remote, tmp;
-
-    path := DirectoriesSystemPrograms();
-    cmd_full := Filename( path, "git" );
-    if cmd_full = fail then
-        Error("Could not locate 'git' in your PATH");
-    fi;
+    local stdin, stdout, RunGit, remote, tmp;
 
     stdin := InputTextUser();
     stdout := OutputTextUser();
 
     RunGit := function(args, errorMsg)
         local res;
-        res := Process(dir, cmd_full, stdin, stdout, args);
+        res := PKGMKR_RunCommand( dir, "git", args, stdin, stdout );
         if res <> 0 then
             Error(errorMsg);
         fi;

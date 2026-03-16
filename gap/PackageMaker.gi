@@ -20,31 +20,45 @@
 
 BindGlobal( "DISABLED_ENTRY", MakeImmutable("DISABLED_ENTRY") );
 
-BindGlobal( "Command", function(cmd, args)
-    local out, outstream, instream, path, cmd_full, res;
+BindGlobal( "PKGMKR_RunCommand", function( dir, cmd, args, instream, outstream )
+    local path, cmd_full, close_instream, res;
 
-    out := "";
-    outstream := OutputTextString(out, false);
-    instream := InputTextString("");
+    close_instream := false;
+    if instream = fail then
+        instream := InputTextNone();
+        close_instream := true;
+    fi;
 
     path := DirectoriesSystemPrograms();
     cmd_full := Filename( path, cmd );
     if cmd_full = fail then
-        CloseStream(instream);
-        CloseStream(outstream);
-        #Error("Could not locate command '", cmd, "' in your PATH");
+        if close_instream then
+            CloseStream( instream );
+        fi;
         return fail;
     fi;
 
-    res := Process(DirectoryCurrent(), cmd_full, instream, outstream, args);
-
-    CloseStream(instream);
-    CloseStream(outstream);
-
-    if res = 0 then
-        return out;
+    res := Process( dir, cmd_full, instream, outstream, args );
+    if close_instream then
+        CloseStream( instream );
     fi;
-    return fail;
+    return res;
+end );
+
+BindGlobal( "PKGMKR_CommandOutput", function( dir, cmd, args )
+    local out, outstream, instream, res;
+
+    out := "";
+    outstream := OutputTextString( out, false );
+    instream := InputTextString( "" );
+    res := PKGMKR_RunCommand( dir, cmd, args, instream, outstream );
+    CloseStream( instream );
+    CloseStream( outstream );
+
+    if res <> 0 then
+        return fail;
+    fi;
+    return out;
 end );
 
 # Return current date as a string with format DD/MM/YYYY.
