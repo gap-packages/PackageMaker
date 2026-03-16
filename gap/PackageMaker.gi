@@ -337,7 +337,7 @@ BindGlobal( "Command", function(cmd, args)
 end );
 
 BindGlobal( "CreateGitRepository", function(dir, github)
-    local path, stdin, stdout, cmd_full, RunGit, remote, tmp, shell, maindir;
+    local path, stdin, stdout, cmd_full, RunGit, remote, tmp;
 
     path := DirectoriesSystemPrograms();
     cmd_full := Filename( path, "git" );
@@ -376,65 +376,6 @@ BindGlobal( "CreateGitRepository", function(dir, github)
 #     RunGit(["branch", "-u", "origin", "main"],
 #            "Failed to set upstream remote for main branch");
 
-    if github.gh_pages then
-        # Setup everything for GitHubPagesForGAP, following the instructions
-        # from its README.
-
-        Print("\n");
-        Print("Fetching GitHubPagesForGAP...\n");
-
-        RunGit(["remote", "add", "gh-gap", "https://github.com/gap-system/GitHubPagesForGAP"],
-               "Failed to add gh-gap remote to gh-pages");
-
-        RunGit(["fetch", "gh-gap"],
-               "Failed to fetch gh-gap remote");
-
-        Print("Creating gh-pages branch...\n");
-
-        RunGit(["branch", "gh-pages", "gh-gap/gh-pages", "--no-track"],
-               "Failed to create gh-pages branch");
-
-        # add a worktree (TODO: check that the git version is recent enough)
-        RunGit(["worktree", "add", "gh-pages", "gh-pages"],
-               "Failed to create gh-pages worktree");
-
-        # cd gh-pages
-        maindir := dir;
-        dir := Directory(Filename(dir, "gh-pages"));
-        if not IsDirectoryPath(dir) then
-            Error(dir, " is not a directory");
-        fi;
-
-        # We use the shell for the next commands to get glob expansion
-        shell := Filename(DirectoriesSystemPrograms(), "sh");
-
-        # cp -f ../PackageInfo.g ../README .
-        tmp := Process(dir, shell, stdin, stdout, ["-c", "cp -f ../PackageInfo.g ../README.md ."]);
-        if tmp <> 0 then
-            Error("Failed to copy files to gh-pages directory");
-        fi;
-
-        # cp -f ../doc/*.{css,html,js,txt} doc/
-        # TODO: the above only makes sense if we run "makedoc.g" before that.
-        # Which could fail (?) depending on the installed AutoDoc version...
-
-        # gap update.g
-        tmp := Process(dir, shell, stdin, stdout, ["-c", "gap -A -q update.g"]);
-        if tmp <> 0 then
-            Error("Failed to copy files to gh-pages directory");
-        fi;
-
-        # add and commit
-        RunGit(["add", "-A"],
-               "Failed adding files to gh-pages branch");
-
-        RunGit(["commit", "-m", "Setup gh-pages based on GitHubPagesForGAP"],
-               "Failed committing files to gh-pages branch");
-
-        dir := maindir;
-    fi;
-
-
     Print("Done creating git repository.\n");
 
     # push to remote, but only after the user said it was OK
@@ -448,14 +389,6 @@ BindGlobal( "CreateGitRepository", function(dir, github)
     RunGit(["push", "-u", "origin", "main"],
            "Failed to push main branch to GitHub");
 
-    if github.gh_pages then
-
-        dir := Directory(Filename(dir, "gh-pages"));
-
-        RunGit(["push", "-u", "origin", "gh-pages"],
-               "Failed to push gh-pages branch to GitHub");
-
-    fi;
 end );
 
 # Return current date as a string with format DD/MM/YYYY.
@@ -530,10 +463,9 @@ InstallGlobalFunction( PackageWizard, function()
         fi;
 
         # TODO: just always do this??
-        github.gh_pages := AskYesNoQuestion("Do you want to use GitHubPagesForGAP?" : default := true);
-
-        # TODO: just always do this??
-        github.ci := AskYesNoQuestion("Do you want to use GitHubActions and Codecov?" : default := true);
+        github.ci := AskYesNoQuestion(
+            "Do you want to use GitHub Actions for automated tests and making releases?"
+            : default := true);
 
         Print("I need to know the URL of the GitHub repository.\n");
         Print("It is of the form https://github.com/USER/REPOS.\n");
@@ -723,7 +655,7 @@ end
     fi;
 
     #
-    # Phase 3 (optional): Setup a git repository and gh-pages
+    # Phase 3 (optional): Setup a git repository
     #
     if create_repo then
 

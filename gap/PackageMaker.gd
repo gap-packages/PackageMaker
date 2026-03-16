@@ -29,7 +29,7 @@
 #! including:
 #! - a git repository for use on GitHub;
 #! - a simple C or C++ kernel extension, including a build system;
-#! - continuous integration using Travis CI;
+#! - continuous integration and release automation using GitHub Actions;
 #! - code coverage tracking;
 #! - ... and more.
 #!
@@ -52,8 +52,9 @@
 #! What is the name of the package? SuperPackage
 #! Enter a short (one sentence) description of your package: A super nice new package
 #! Shall I prepare your new package for GitHub? [Y/n] y
-#! Do you want to use GitHubPagesForGAP? [Y/n] y
-#! Do you want to use Travis and Codecov? [Y/n] y
+#! Do you want to use GitHub Actions for automated tests and making releases? [Y/n] y
+#! The release workflow updates the package website on GitHub Pages
+#! whenever you make a package release.
 #! I need to know the URL of the GitHub repository.
 #! It is of the form https://github.com/USER/REPOS.
 #! What is USER (typically your GitHub username)? [mhorn]
@@ -62,6 +63,11 @@
 DeclareGlobalFunction( "PackageWizard" );
 
 #! @Section What next?
+#! If you enabled the GitHub Actions workflows then package releases will
+#! also update the package website on GitHub Pages. &PackageMaker; used to
+#! create a local <C>gh-pages</C> checkout for this, but that is no longer
+#! necessary.
+#! 
 #! Some suggestions for what to do next:
 #! - edit the <F>README.md</F> file of your new package
 #! - add some actual functionality to it
@@ -69,4 +75,3 @@ DeclareGlobalFunction( "PackageWizard" );
 #! - try loading your package
 #! - add some `.tst` test files
 #! - ...
-
