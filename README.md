@@ -1,21 +1,24 @@
-# `PackageMaker`
+[![CI](https://github.com/gap-packages/PackageMaker/actions/workflows/CI.yml/badge.svg)](https://github.com/gap-packages/PackageMaker/actions/workflows/CI.yml)
+[![Code Coverage](https://codecov.io/github/gap-packages/PackageMaker/coverage.svg?branch=master&token=)](https://codecov.io/gh/gap-packages/PackageMaker)
 
-`PackageMaker` is a [GAP](https://www.gap-system.org/) package that makes
+# PackageMaker
+
+PackageMaker is a [GAP](https://www.gap-system.org/) package that makes
 it easy and convenient to create new GAP packages.
 
 You can use it as follows:
 
-1. Download `PackageMaker` and extract it into a GAP `pkg` directory. Or
+1. Download PackageMaker and extract it into a GAP `pkg` directory. Or
    just clone its git repository inside the `pkg` directory:
 
         git clone https://github.com/gap-packages/PackageMaker
 
-   Alternatively you could install `PackageMaker` using the [PackageManager](https://github.com/gap-packages/PackageManager) GAP package by entering these commands in GAP:
+   Alternatively you could install PackageMaker using the [PackageManager](https://github.com/gap-packages/PackageManager) GAP package by entering these commands in GAP:
 
         LoadPackage("PackageManager");
         InstallPackage("https://github.com/gap-packages/PackageMaker");
 
-2. Start GAP, load the `PackageMaker` package:
+2. Start GAP, load the PackageMaker package:
 
         LoadPackage("PackageMaker");
 
@@ -23,7 +26,7 @@ You can use it as follows:
 
         PackageWizard();
 
-4. Answer the questions about your new package. Afterwards, `PackageMaker`
+4. Answer the questions about your new package. Afterwards, PackageMaker
    creates a new directory for the new package and populates it with all the
    files needed for a basic package.
 
@@ -58,7 +61,7 @@ You can also contact me directly via [email](mhorn@rptu.de).
 
 ## License
 
-`PackageMaker` is free software you can redistribute it and/or modify it
+PackageMaker is free software you can redistribute it and/or modify it
 under the terms of the GNU General Public License as published by the Free
 Software Foundation; either version 2 of the License, or (at your option) any
 later version. For details, see the file `COPYING` distributed as part of
@@ -66,5 +69,5 @@ this package or see the FSF's own site.
 
 As a special exception to the terms of the GNU General Public License, you
 are granted permission to distribute a package you generated using
-`PackageMaker` under any open source license recognized as such by the
+PackageMaker under any open source license recognized as such by the
 [Open Source Initiative (OSI)](https://opensource.org).
