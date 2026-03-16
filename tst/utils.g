@@ -89,8 +89,6 @@ BindGlobal( "PKGMKR_CheckExpected", function( name, answers )
         Error( "Missing expected fixture directory ", expected );
     fi;
 
-    Print( "Comparing generated package against ",
-           expected, "\n" );
     res := PKGMKR_RunCommand( DirectoryCurrent(), "diff",
                               [ "-ur", expected, generated.actualdir ],
                               fail, OutputTextUser() );
