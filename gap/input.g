@@ -198,7 +198,9 @@ InstallGlobalFunction( PackageWizardInput, function()
         alphanum := "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
         # Try to get github username from git config
-        tmp := Command("git", ["config", "github.user"]);
+        tmp := PKGMKR_CommandOutput( DirectoryCurrent(),
+                                     "git",
+                                     [ "config", "github.user" ] );
         if tmp <> fail then
             tmp := Chomp(tmp);
         fi;

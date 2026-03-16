@@ -24,21 +24,6 @@ BindGlobal( "PKGMKR_DemoPackageAnswers", function()
     );
 end );
 
-BindGlobal( "PKGMKR_RunCommand", function( dir, cmd, args, outstream )
-    local path, cmd_full, instream, res;
-
-    path := DirectoriesSystemPrograms();
-    cmd_full := Filename( path, cmd );
-    if cmd_full = fail then
-        Error( "Could not locate command '", cmd, "' in your PATH" );
-    fi;
-
-    instream := InputTextString( "" );
-    res := Process( dir, cmd_full, instream, outstream, args );
-    CloseStream( instream );
-    return res;
-end );
-
 BindGlobal( "PKGMKR_FixtureRoot", function()
     return DirectoriesPackageLibrary( "PackageMaker", "" )[1];
 end );
@@ -85,7 +70,7 @@ BindGlobal( "PKGMKR_RegenExpected", function( name, answers )
     outstream := OutputTextString( out, false );
     if 0 <> PKGMKR_RunCommand( DirectoryCurrent(), "cp",
                                [ "-R", generated.actualdir, expected ],
-                               outstream ) then
+                               fail, outstream ) then
         CloseStream( outstream );
         Error( "Failed to copy generated fixture to ", expected );
     fi;
@@ -108,7 +93,7 @@ BindGlobal( "PKGMKR_CheckExpected", function( name, answers )
            expected, "\n" );
     res := PKGMKR_RunCommand( DirectoryCurrent(), "diff",
                               [ "-ur", expected, generated.actualdir ],
-                              OutputTextUser() );
+                              fail, OutputTextUser() );
     if res <> 0 then
         RemoveDirectoryRecursively( generated.tempdir );
         Error( "Generated package differed from expected output" );
