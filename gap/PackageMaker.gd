@@ -60,6 +60,8 @@
 #! What is USER (typically your GitHub username)? [mhorn]
 #! ...
 #! @EndLogSession
+DeclareGlobalFunction( "PackageWizardInput" );
+DeclareGlobalFunction( "PackageWizardGenerate" );
 DeclareGlobalFunction( "PackageWizard" );
 
 #! @Section What next?
