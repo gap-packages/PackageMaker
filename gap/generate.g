@@ -327,16 +327,9 @@ BindGlobal( "CreateGitRepository", function(dir, github)
 
     Print("Done creating git repository.\n");
 
-    # push to remote, but only after the user said it was OK
     tmp := Concatenation("https://github.com/", github.username, "/", github.reponame);
-    Print("I will now wait for you to create <", tmp, "> via <https://github.com/new>.\n");
-    Print("Afterwards, I can push the new package repository to GitHub.\n");
-    if AskYesNoQuestion("Shall I push the package repository to GitHub now?" : default := true) <> true then
-        return;
-    fi;
-
-    RunGit(["push", "-u", "origin", "main"],
-           "Failed to push main branch to GitHub");
+    Print("Create <", tmp, "> via <https://github.com/new> and then run:\n");
+    Print("  git push -u origin main\n");
 
 end );
 
