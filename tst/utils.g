@@ -1,0 +1,126 @@
+BindGlobal( "PKGMKR_DemoPackageAnswers", function()
+    return rec(
+        Date := "16/03/2026",
+        GitHub := false,
+        GitHubPagesForGAP := false,
+        PackageName := "DemoPackage",
+        PackageWWWHome := "https://example.invalid/DemoPackage",
+        Persons := [
+            rec(
+                Email := "demo@example.invalid",
+                FirstNames := "Demo",
+                Institution := "PackageMaker Test Suite",
+                IsAuthor := true,
+                IsMaintainer := true,
+                LastName := "Maintainer",
+                Place := "Test City",
+                PostalAddress := "123 Test Street\\n12345 Test City",
+                WWWHome := "https://example.invalid/~demo"
+            )
+        ],
+        Subtitle := "Regression fixture for PackageWizardGenerate",
+        Version := "0.1",
+        kernel_extension := ""
+    );
+end );
+
+BindGlobal( "PKGMKR_RunCommand", function( dir, cmd, args, outstream )
+    local path, cmd_full, instream, res;
+
+    path := DirectoriesSystemPrograms();
+    cmd_full := Filename( path, cmd );
+    if cmd_full = fail then
+        Error( "Could not locate command '", cmd, "' in your PATH" );
+    fi;
+
+    instream := InputTextString( "" );
+    res := Process( dir, cmd_full, instream, outstream, args );
+    CloseStream( instream );
+    return res;
+end );
+
+BindGlobal( "PKGMKR_FixtureRoot", function()
+    return DirectoriesPackageLibrary( "PackageMaker", "" )[1];
+end );
+
+BindGlobal( "PKGMKR_ExpectedDir", function( name )
+    return Filename( PKGMKR_FixtureRoot(),
+                     Concatenation( "tst/", name, ".expected" ) );
+end );
+
+BindGlobal( "PKGMKR_GenerateFixture", function( name, answers )
+    local tempdir, olddir, actualdir;
+
+    tempdir := Filename( DirectoryTemporary(),
+                         Concatenation( "packagemaker-", name ) );
+    if IsDirectoryPath( tempdir ) then
+        RemoveDirectoryRecursively( tempdir );
+    fi;
+    AUTODOC_CreateDirIfMissing( tempdir );
+
+    olddir := AUTODOC_CurrentDirectory();
+    ChangeDirectoryCurrent( tempdir );
+    PackageWizardGenerate( answers );
+    ChangeDirectoryCurrent( olddir );
+
+    actualdir := Filename( Directory( tempdir ), answers.PackageName );
+    if not IsDirectoryPath( actualdir ) then
+        Error( "Failed to generate fixture directory ", actualdir );
+    fi;
+
+    return rec( actualdir := actualdir, tempdir := tempdir );
+end );
+
+BindGlobal( "PKGMKR_RegenExpected", function( name, answers )
+    local generated, expected, out, outstream;
+
+    generated := PKGMKR_GenerateFixture( name, answers );
+    expected := PKGMKR_ExpectedDir( name );
+
+    if IsDirectoryPath( expected ) then
+        RemoveDirectoryRecursively( expected );
+    fi;
+
+    out := "";
+    outstream := OutputTextString( out, false );
+    if 0 <> PKGMKR_RunCommand( DirectoryCurrent(), "cp",
+                               [ "-R", generated.actualdir, expected ],
+                               outstream ) then
+        CloseStream( outstream );
+        Error( "Failed to copy generated fixture to ", expected );
+    fi;
+    CloseStream( outstream );
+
+    RemoveDirectoryRecursively( generated.tempdir );
+end );
+
+BindGlobal( "PKGMKR_CheckExpected", function( name, answers )
+    local generated, expected, res;
+
+    generated := PKGMKR_GenerateFixture( name, answers );
+    expected := PKGMKR_ExpectedDir( name );
+    if not IsDirectoryPath( expected ) then
+        RemoveDirectoryRecursively( generated.tempdir );
+        Error( "Missing expected fixture directory ", expected );
+    fi;
+
+    Print( "Comparing generated package against ",
+           expected, "\n" );
+    res := PKGMKR_RunCommand( DirectoryCurrent(), "diff",
+                              [ "-ur", expected, generated.actualdir ],
+                              OutputTextUser() );
+    if res <> 0 then
+        RemoveDirectoryRecursively( generated.tempdir );
+        Error( "Generated package differed from expected output" );
+    fi;
+
+    RemoveDirectoryRecursively( generated.tempdir );
+end );
+
+BindGlobal( "PKGMKR_RegenAllExpected", function()
+    PKGMKR_RegenExpected( "DemoPackage", PKGMKR_DemoPackageAnswers() );
+end );
+
+BindGlobal( "PKGMKR_RunGenerationTests", function()
+    PKGMKR_CheckExpected( "DemoPackage", PKGMKR_DemoPackageAnswers() );
+end );

@@ -5,8 +5,6 @@
 # metadata in PackageInfo.g.
 #
 LoadPackage( "PackageMaker" );
-
-TestDirectory(DirectoriesPackageLibrary( "PackageMaker", "tst" ),
-  rec(exitGAP := true));
-
-FORCE_QUIT_GAP(1); # if we ever get here, there was an error
+ReadPackage( "PackageMaker", "tst/utils.g" );
+PKGMKR_RunGenerationTests();
+QUIT_GAP( 0 );
