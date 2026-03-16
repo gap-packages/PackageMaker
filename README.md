@@ -10,16 +10,35 @@ You can use it as follows:
 
         git clone https://github.com/gap-packages/PackageMaker
 
-2. Start GAP, load the `PackageMaker` package and run the package wizard:
+   Alternatively you could install `PackageMaker` using the [PackageManager](https://github.com/gap-packages/PackageManager) GAP package by entering these commands in GAP:
+
+        LoadPackage("PackageManager");
+        InstallPackage("https://github.com/gap-packages/PackageMaker");
+
+2. Start GAP, load the `PackageMaker` package:
 
         LoadPackage("PackageMaker");
+
+3. Run the package wizard:
+
         PackageWizard();
 
-3. Answer the questions about your new package. Afterwards, `PackageMaker`
+4. Answer the questions about your new package. Afterwards, `PackageMaker`
    creates a new directory for the new package and populates it with all the
    files needed for a basic package.
 
-4. Move the newly created package directory to a suitable place.
+5. Move the newly created package directory to a suitable place.
+
+> Note: The `PackageWizard` function generates your new package in the current
+> directory. For GAP to be able to load your new package, it must be in one of
+> the GAP's package search directories. For example, inside the `pkg`
+> directory of your GAP installation, or inside a directory `~/.gap/pkg` in
+> your home directory. If your package is not already in one of these
+> locations, either move it there; or instruct GAP to search in the current
+> directory for packages, e.g. by running it via `gap --packagedirs .` from
+> command line (requires at least GAP 4.15).
+
+Or just start GAP inside the `pkg` directory.
 
 Next, you may wish to learn more about the purpose of the various
 generated files as well as the the meaning and correct usage of the
