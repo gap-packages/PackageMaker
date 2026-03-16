@@ -1,0 +1,46 @@
+name: CI
+
+# Trigger the workflow on push or pull request
+on:
+  push:
+    branches:
+      - master
+      - main
+  pull_request:
+
+# the `concurrency` settings ensure that not too many CI jobs run in parallel
+concurrency:
+  # group by workflow and ref; the last slightly strange component ensures that for pull
+  # requests, we limit to 1 concurrent job, but for the default repository branch we don't
+  group: ${{ github.workflow }}-${{ github.ref }}-${{ github.ref_name != github.event.repository.default_branch || github.run_number }}
+  # Cancel intermediate builds, but only if it is a pull request build.
+  cancel-in-progress: ${{ startsWith(github.ref, 'refs/pull/') }}
+
+jobs:
+  # The CI test job
+  test:
+    name: ${{ matrix.gap-version }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        gap-version:
+          - 'devel'
+          - '4.15'
+          - '4.14'
+          - '4.13'
+
+    steps:
+      - uses: actions/checkout@v6
+      - uses: gap-actions/setup-gap@v3
+        with:
+          gap-version: ${{ matrix.gap-version }}
+      - uses: gap-actions/build-pkg@v2
+      - uses: gap-actions/run-pkg-tests@v4
+      - uses: gap-actions/run-pkg-tests@v4
+        with:
+          mode: onlyneeded
+      - uses: gap-actions/process-coverage@v3
+      - uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
