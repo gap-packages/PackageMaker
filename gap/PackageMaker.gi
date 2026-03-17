@@ -78,10 +78,6 @@ end );
 InstallGlobalFunction( PackageWizard, function()
     local answers;
 
-    Print("Welcome to the GAP PackageMaker Wizard.\n",
-          "I will now guide you step-by-step through the package\n",
-          "creation process by asking you some questions.\n\n");
-
     answers := PackageWizardInput();
     if answers = fail then
         return;

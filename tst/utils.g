@@ -2,7 +2,7 @@ BindGlobal( "PKGMKR_DemoPackageAnswers", function()
     return rec(
         Date := "16/03/2026",
         GitHub := true,
-        GitHubPagesForGAP := true,
+        GitHubActions := true,
         GitHub_reponame := "DemoPackage",
         GitHub_username := "demo-user",
         PackageName := "DemoPackage",
@@ -111,4 +111,51 @@ end );
 
 BindGlobal( "PKGMKR_RunGenerationTests", function()
     PKGMKR_CheckExpected( "DemoPackage", PKGMKR_DemoPackageAnswers() );
+end );
+
+BindGlobal( "PKGMKR_TestFakeUI", function( scripted )
+    local state;
+
+    state := rec(
+        scripted := ShallowCopy( scripted ),
+        calls := [ ],
+        messages := [ ]
+    );
+
+    return rec(
+        state := state,
+        message := function( spec, answers )
+            Add( state.messages, spec.prompt );
+            Add( state.calls,
+                 rec( kind := "message", key := spec.key, prompt := spec.prompt ) );
+            return fail;
+        end,
+        string := function( spec, answers, default )
+            local item;
+
+            item := Remove( state.scripted, 1 );
+            Add( state.calls,
+                 rec( kind := "string", key := spec.key, default := default ) );
+            return item;
+        end,
+        yesno := function( spec, answers, default )
+            local item;
+
+            item := Remove( state.scripted, 1 );
+            Add( state.calls,
+                 rec( kind := "yesno", key := spec.key, default := default ) );
+            return item;
+        end,
+        choice := function( spec, answers, choices, default )
+            local item;
+
+            item := Remove( state.scripted, 1 );
+            Add( state.calls,
+                 rec( kind := "choice",
+                      key := spec.key,
+                      default := default,
+                      choices := ShallowCopy( choices ) ) );
+            return item;
+        end
+    );
 end );
