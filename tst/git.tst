@@ -5,14 +5,14 @@ gap> tmpdir := Filename( DirectoryTemporary(), "packagemaker-git-tst" );;
 gap> if IsDirectoryPath( tmpdir ) then RemoveDirectoryRecursively( tmpdir ); fi;
 gap> AUTODOC_CreateDirIfMissing( tmpdir );
 true
-gap> Assert( 0,
->   PKGMKR_CommandOutput( Directory( tmpdir ), "git", [ "init", "-b", "main" ] ) <> fail );;
-gap> Assert( 0,
->   PKGMKR_CommandOutput( Directory( tmpdir ), "git",
->                         [ "config", "user.name", "PackageMaker Tests" ] ) <> fail );;
-gap> Assert( 0,
->   PKGMKR_CommandOutput( Directory( tmpdir ), "git",
->                         [ "config", "user.email", "tests@example.invalid" ] ) <> fail );;
+gap> PKGMKR_CommandOutput( Directory( tmpdir ), "git", [ "init", "-b", "main" ] ) <> fail;
+true
+gap> PKGMKR_CommandOutput( Directory( tmpdir ), "git",
+>                         [ "config", "user.name", "PackageMaker Tests" ] ) <> fail;
+true
+gap> PKGMKR_CommandOutput( Directory( tmpdir ), "git",
+>                         [ "config", "user.email", "tests@example.invalid" ] ) <> fail;
+true
 gap> PrintTo( Filename( Directory( tmpdir ), "README.md" ), "probe\n" );;
 gap> CreateGitRepository(
 >   Directory( tmpdir ),
@@ -68,14 +68,14 @@ gap> tmpdir := Filename( DirectoryTemporary(), "packagemaker-git-retry-tst" );;
 gap> if IsDirectoryPath( tmpdir ) then RemoveDirectoryRecursively( tmpdir ); fi;
 gap> AUTODOC_CreateDirIfMissing( tmpdir );
 true
-gap> Assert( 0,
->   PKGMKR_CommandOutput( Directory( tmpdir ), "git", [ "init", "-b", "main" ] ) <> fail );;
-gap> Assert( 0,
->   PKGMKR_CommandOutput( Directory( tmpdir ), "git",
->                         [ "config", "user.name", "PackageMaker Tests" ] ) <> fail );;
-gap> Assert( 0,
->   PKGMKR_CommandOutput( Directory( tmpdir ), "git",
->                         [ "config", "user.email", "tests@example.invalid" ] ) <> fail );;
+gap> PKGMKR_CommandOutput( Directory( tmpdir ), "git", [ "init", "-b", "main" ] ) <> fail;
+true
+gap> PKGMKR_CommandOutput( Directory( tmpdir ), "git",
+>                         [ "config", "user.name", "PackageMaker Tests" ] ) <> fail;
+true
+gap> PKGMKR_CommandOutput( Directory( tmpdir ), "git",
+>                         [ "config", "user.email", "tests@example.invalid" ] ) <> fail;
+true
 gap> PrintTo( Filename( Directory( tmpdir ), "README.md" ), "probe\n" );;
 gap> attempt := 0;;
 gap> CreateGitRepository(
