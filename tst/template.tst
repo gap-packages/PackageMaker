@@ -17,29 +17,29 @@ gap> ChangeDirectoryCurrent( tmpdir );;
 gap> AUTODOC_CreateDirIfMissing( pkginfo.PackageName );
 true
 gap> TranslateTemplate( fail, "README.md", pkginfo );;
-gap> Assert( 0,
->   PositionSublist( StringFile( Filename( Directory( pkginfo.PackageName ), "README.md" ) ),
->                    "# The GAP package DemoPackage" ) = 1 );;
+gap> PositionSublist( StringFile( Filename( Directory( pkginfo.PackageName ), "README.md" ) ),
+>                    "# The GAP package DemoPackage" ) = 1;
+true
 gap> AUTODOC_CreateDirIfMissing( Concatenation( pkginfo.PackageName, "/gap" ) );
 true
 gap> TranslateTemplate( "gap/PKG.gd",
 >                      Concatenation( "gap/", pkginfo.PackageName, ".gd" ),
 >                      pkginfo );;
-gap> Assert( 0,
->   PositionSublist(
+gap> PositionSublist(
 >     StringFile( Filename( Directory( Concatenation( pkginfo.PackageName, "/gap" ) ),
 >                           Concatenation( pkginfo.PackageName, ".gd" ) ) ),
->     "DeclareGlobalFunction( \"DemoPackage_Example\" );" ) <> fail );;
+>     "DeclareGlobalFunction( \"DemoPackage_Example\" );" ) <> fail;
+true
 gap> AUTODOC_CreateDirIfMissing( Concatenation( pkginfo.PackageName, "/.github" ) );
 true
 gap> AUTODOC_CreateDirIfMissing( Concatenation( pkginfo.PackageName, "/.github/workflows" ) );
 true
 gap> CopyTemplate( fail, ".github/workflows/CI.yml", pkginfo );;
-gap> Assert( 0,
->   StringFile( Filename( Directory( Concatenation( pkginfo.PackageName, "/.github/workflows" ) ),
+gap> StringFile( Filename( Directory( Concatenation( pkginfo.PackageName, "/.github/workflows" ) ),
 >                         "CI.yml" ) ) =
 >   StringFile( Filename( DirectoriesPackageLibrary( "PackageMaker", "templates" )[1],
->                         ".github/workflows/CI.yml" ) ) );;
+>                         ".github/workflows/CI.yml" ) );
+true
 gap> ChangeDirectoryCurrent( olddir );;
 gap> RemoveDirectoryRecursively( tmpdir );;
 
