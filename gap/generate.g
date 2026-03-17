@@ -294,6 +294,10 @@ end );
 BindGlobal( "CreateGitRepository", function(dir, github)
     local stdin, stdout, RunGit, remote, tmp;
 
+    if ValueOption( "skipGitRepositorySetup" ) = true then
+        return;
+    fi;
+
     stdin := InputTextUser();
     stdout := OutputTextUser();
 

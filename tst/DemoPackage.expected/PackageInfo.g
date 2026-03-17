@@ -28,12 +28,16 @@ Persons := [
   ),
 ],
 
-#SourceRepository := rec( Type := "TODO", URL := "URL" ),
-#IssueTrackerURL := "TODO",
-PackageWWWHome := "https://example.invalid/DemoPackage/",
-PackageInfoURL := Concatenation( ~.PackageWWWHome, "PackageInfo.g" ),
-README_URL     := Concatenation( ~.PackageWWWHome, "README.md" ),
-ArchiveURL     := Concatenation( ~.PackageWWWHome,
+SourceRepository := rec(
+    Type := "git",
+    URL := "https://github.com/demo-user/DemoPackage",
+),
+IssueTrackerURL := Concatenation( ~.SourceRepository.URL, "/issues" ),
+PackageWWWHome  := "https://demo-user.github.io/DemoPackage/",
+PackageInfoURL  := Concatenation( ~.PackageWWWHome, "PackageInfo.g" ),
+README_URL      := Concatenation( ~.PackageWWWHome, "README.md" ),
+ArchiveURL      := Concatenation( ~.SourceRepository.URL,
+                                 "/releases/download/v", ~.Version,
                                  "/", ~.PackageName, "-", ~.Version ),
 
 ArchiveFormats := ".tar.gz",

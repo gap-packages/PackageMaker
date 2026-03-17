@@ -1,10 +1,12 @@
 BindGlobal( "PKGMKR_DemoPackageAnswers", function()
     return rec(
         Date := "16/03/2026",
-        GitHub := false,
-        GitHubPagesForGAP := false,
+        GitHub := true,
+        GitHubPagesForGAP := true,
+        GitHub_reponame := "DemoPackage",
+        GitHub_username := "demo-user",
         PackageName := "DemoPackage",
-        PackageWWWHome := "https://example.invalid/DemoPackage",
+        PackageWWWHome := "https://demo-user.github.io/DemoPackage",
         Persons := [
             rec(
                 Email := "demo@example.invalid",
@@ -45,7 +47,7 @@ BindGlobal( "PKGMKR_GenerateFixture", function( name, answers )
 
     olddir := AUTODOC_CurrentDirectory();
     ChangeDirectoryCurrent( tempdir );
-    PackageWizardGenerate( answers );
+    PackageWizardGenerate( answers : skipGitRepositorySetup := true );
     ChangeDirectoryCurrent( olddir );
 
     actualdir := Filename( Directory( tempdir ), answers.PackageName );
@@ -65,11 +67,14 @@ BindGlobal( "PKGMKR_RegenExpected", function( name, answers )
     if IsDirectoryPath( expected ) then
         RemoveDirectoryRecursively( expected );
     fi;
+    AUTODOC_CreateDirIfMissing( expected );
 
     out := "";
     outstream := OutputTextString( out, false );
     if 0 <> PKGMKR_RunCommand( DirectoryCurrent(), "cp",
-                               [ "-R", generated.actualdir, expected ],
+                               [ "-R",
+                                 Concatenation( generated.actualdir, "/." ),
+                                 expected ],
                                fail, outstream ) then
         CloseStream( outstream );
         Error( "Failed to copy generated fixture to ", expected );
