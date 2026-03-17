@@ -37,7 +37,11 @@
 
 #! @Section How does one use &PackageMaker;?
 #! Simply load it, then invoke <C>PackageWizard()</C> and follow
-#! the instructions.
+#! the instructions. If you ask &PackageMaker; to create a git
+#! repository, git must have <C>user.name</C> and <C>user.email</C>
+#! configured. If they are missing, &PackageMaker; explains how to
+#! set them up, lets you retry, or keeps the generated package
+#! directory without creating a git repository.
 
 #! @Description
 #! Interactively create a package skeleton. You can abort by either

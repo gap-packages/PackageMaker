@@ -292,7 +292,7 @@ end
 end );
 
 BindGlobal( "CreateGitRepository", function(dir, github)
-    local stdin, stdout, RunGit, remote, tmp;
+    local stdin, stdout, RunGit, remote, tmp, gitIdentityChecker, askRetry;
 
     if ValueOption( "skipGitRepositorySetup" ) = true then
         return;
@@ -309,7 +309,35 @@ BindGlobal( "CreateGitRepository", function(dir, github)
         fi;
     end;
 
+    gitIdentityChecker := ValueOption( "gitIdentityChecker" );
+    if gitIdentityChecker = fail then
+        gitIdentityChecker := function( currentDir )
+            return PKGMKR_CommandOutput( currentDir, "git",
+                                         [ "config", "user.name" ] ) <> fail
+               and PKGMKR_CommandOutput( currentDir, "git",
+                                         [ "config", "user.email" ] ) <> fail;
+        end;
+    fi;
+
+    askRetry := ValueOption( "askRetry" );
+    if askRetry = fail then
+        askRetry := function( question )
+            return AskYesNoQuestion( question : default := false );
+        end;
+    fi;
+
     Print("Creating the git repository...\n");
+
+    while not gitIdentityChecker( dir ) do
+        Print("Git needs user.name and user.email configured before it can create the initial commit.\n");
+        Print("Please run these commands, then answer Y to retry:\n");
+        Print("  git config --global user.name \"Your Name\"\n");
+        Print("  git config --global user.email \"you@example.com\"\n");
+        if not askRetry( "Retry git repository setup after configuring git?" ) then
+            Print("Skipping git repository setup. The generated package directory has been kept.\n");
+            return false;
+        fi;
+    od;
 
     RunGit(["init", "-b", "main"],
            "Failed to create git repository");
@@ -334,6 +362,8 @@ BindGlobal( "CreateGitRepository", function(dir, github)
     tmp := Concatenation("https://github.com/", github.username, "/", github.reponame);
     Print("Create <", tmp, "> via <https://github.com/new> and then run:\n");
     Print("  git push -u origin main\n");
+
+    return true;
 
 end );
 
