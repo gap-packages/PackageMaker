@@ -112,7 +112,302 @@ BindGlobal( "AskAlternativesQuestion", function( question, answers )
     return ans;
 end );
 
+BindGlobal( "PKGMKR_SpecValue", function( spec, field, answers )
+    local value;
+
+    if not IsBound( spec.( field ) ) then
+        return fail;
+    fi;
+
+    value := spec.( field );
+    if IsFunction( value ) then
+        return value( answers );
+    fi;
+    return value;
+end );
+
+BindGlobal( "PKGMKR_IsQuestionVisible", function( spec, answers )
+    local visible;
+
+    visible := PKGMKR_SpecValue( spec, "isVisible", answers );
+    return visible in [ fail, true ];
+end );
+
+BindGlobal( "PKGMKR_AskQuestionWithUI", function( spec, ui, answers )
+    local kind, default, choices;
+
+    kind := spec.kind;
+    default := PKGMKR_SpecValue( spec, "default", answers );
+
+    if kind = "message" then
+        return ui.message( spec, answers );
+    elif kind = "computed" then
+        return PKGMKR_SpecValue( spec, "value", answers );
+    elif kind = "string" then
+        return ui.string( spec, answers, default );
+    elif kind = "yesno" then
+        return ui.yesno( spec, answers, default );
+    elif kind = "choice" then
+        choices := PKGMKR_SpecValue( spec, "choices", answers );
+        return ui.choice( spec, answers, choices, default );
+    fi;
+
+    Error( "Unknown question kind ", kind );
+end );
+
+BindGlobal( "PKGMKR_ValidateQuestionAnswer", function( spec, answers, value )
+    local result;
+
+    if not IsBound( spec.validate ) then
+        return true;
+    fi;
+
+    result := spec.validate( answers, value );
+    if result = true then
+        return true;
+    fi;
+
+    Print( result, "\n" );
+    return false;
+end );
+
+BindGlobal( "PKGMKR_NormalizeQuestionAnswer", function( spec, answers, value )
+    if not IsBound( spec.normalize ) then
+        return value;
+    fi;
+
+    return spec.normalize( answers, value );
+end );
+
+BindGlobal( "PKGMKR_AskQuestions", function( spec, ui, answers )
+    local question, value;
+
+    for question in spec do
+        if not PKGMKR_IsQuestionVisible( question, answers ) then
+            continue;
+        fi;
+
+        if question.kind = "message" then
+            PKGMKR_AskQuestionWithUI( question, ui, answers );
+            continue;
+        fi;
+
+        while true do
+            value := PKGMKR_AskQuestionWithUI( question, ui, answers );
+            if PKGMKR_ValidateQuestionAnswer( question, answers, value ) then
+                value := PKGMKR_NormalizeQuestionAnswer( question, answers, value );
+                answers.( question.key ) := value;
+                break;
+            fi;
+        od;
+    od;
+
+    return answers;
+end );
+
 BindGlobal( "EXTRA_PERSON_KEYS", [ "Email", "WWWHome", "Institution", "Place", "PostalAddress"] );
+
+BindGlobal( "PKGMKR_PrintMessage", function( prompt )
+    local line;
+
+    if IsString( prompt ) then
+        Print( prompt, "\n" );
+        return;
+    fi;
+
+    for line in prompt do
+        Print( line, "\n" );
+    od;
+end );
+
+BindGlobal( "PKGMKR_DefaultInputUI", function()
+    return rec(
+        message := function( spec, answers )
+            PKGMKR_PrintMessage( spec.prompt );
+            return fail;
+        end,
+        string := function( spec, answers, default )
+            if default = fail then
+                return AskQuestion( spec.prompt );
+            fi;
+            return AskQuestion( spec.prompt : default := default );
+        end,
+        yesno := function( spec, answers, default )
+            if default = fail then
+                return AskYesNoQuestion( spec.prompt );
+            fi;
+            return AskYesNoQuestion( spec.prompt : default := default );
+        end,
+        choice := function( spec, answers, choices, default )
+            if default = fail then
+                return AskAlternativesQuestion( spec.prompt, choices );
+            fi;
+            return AskAlternativesQuestion( spec.prompt, choices : default := default );
+        end
+    );
+end );
+
+BindGlobal( "PKGMKR_DefaultGitHubUsername", function( answers )
+    local tmp;
+
+    tmp := PKGMKR_CommandOutput( DirectoryCurrent(), "git",
+                                 [ "config", "github.user" ] );
+    if tmp <> fail then
+        return Chomp( tmp );
+    fi;
+    return fail;
+end );
+
+BindGlobal( "PKGMKR_CheckPackageName", function( answers, value )
+    if LowercaseString( value ) in RecNames( GAPInfo.PackagesInfo ) then
+        return Concatenation( "A package with name '",
+                              LowercaseString( value ),
+                              "' exists already (see GAPInfo.PackagesInfo)." );
+    fi;
+
+    if not IsValidIdentifier( value ) or IsBoundGlobal( value ) then
+        return Concatenation(
+            "The package name must be a valid identifier ",
+            "(non-empty, only letters and digits, not a number, ",
+            "not a keyword) which is not the name of a global variable." );
+    fi;
+
+    if IsExistingFile( value ) then
+        return Concatenation(
+            "A file or directory with this name already exists. ",
+            "Please move it away or choose another package name." );
+    fi;
+
+    return true;
+end );
+
+BindGlobal( "PKGMKR_ValidateSubtitle", function( answers, value )
+    if Length( value ) < 80 then
+        return true;
+    fi;
+    return "The description must be shorter than 80 characters.";
+end );
+
+BindGlobal( "PKGMKR_CheckGitHubUsername", function( answers, value )
+    if 0 < Length( value ) and value[1] <> '-'
+       and ForAll( value, c -> IsAlphaChar( c ) or IsDigitChar( c ) or c = '-' ) then
+        return true;
+    fi;
+
+    return Concatenation(
+        "The name must be nonempty, consist of alphanumerical ",
+        "characters or '-', and must not start with '-'." );
+end );
+
+BindGlobal( "PKGMKR_CheckRepositoryName", function( answers, value )
+    if 0 < Length( value ) and value[1] <> '-'
+       and ForAll( value,
+                   c -> IsAlphaChar( c ) or IsDigitChar( c ) or c in "-._" ) then
+        return true;
+    fi;
+
+    return Concatenation(
+        "The name must be nonempty, consist of alphanumerical ",
+        "characters or '-', '.', '_', and must not start with '-'." );
+end );
+
+BindGlobal( "PKGMKR_InputSpecification", [
+    rec(
+        key := "Welcome",
+        kind := "message",
+        prompt := [
+            "Welcome to the GAP PackageMaker Wizard.",
+            "I will now guide you step-by-step through the package",
+            "creation process by asking you some questions.",
+            ""
+        ]
+    ),
+    rec(
+        key := "PackageName",
+        kind := "string",
+        prompt := "What is the name of the package?",
+        validate := PKGMKR_CheckPackageName
+    ),
+    rec(
+        key := "Subtitle",
+        kind := "string",
+        prompt := "Enter a short (one sentence) description of your package:",
+        validate := PKGMKR_ValidateSubtitle
+    ),
+    rec(
+        key := "GitHub",
+        kind := "yesno",
+        prompt := "Shall I prepare your new package for GitHub?",
+        default := true
+    ),
+    rec(
+        key := "GitHubActions",
+        kind := "yesno",
+        prompt := "Do you want to use GitHub Actions for automated tests and making releases?",
+        default := true,
+        isVisible := answers -> answers.GitHub
+    ),
+    rec(
+        key := "GitHubActions",
+        kind := "computed",
+        value := answers -> false,
+        isVisible := answers -> not answers.GitHub
+    ),
+    rec(
+        key := "GitHubUrlHelp",
+        kind := "message",
+        prompt := [
+            "I need to know the URL of the GitHub repository.",
+            "It is of the form https://github.com/USER/REPOS."
+        ],
+        isVisible := answers -> answers.GitHub
+    ),
+    rec(
+        key := "GitHub_username",
+        kind := "string",
+        prompt := "What is USER (typically your GitHub username)?",
+        default := PKGMKR_DefaultGitHubUsername,
+        validate := PKGMKR_CheckGitHubUsername,
+        isVisible := answers -> answers.GitHub
+    ),
+    rec(
+        key := "GitHub_reponame",
+        kind := "string",
+        prompt := "What is REPOS, the repository name?",
+        default := answers -> answers.PackageName,
+        validate := PKGMKR_CheckRepositoryName,
+        isVisible := answers -> answers.GitHub
+    ),
+    rec(
+        key := "PackageWWWHome",
+        kind := "computed",
+        value := function( answers )
+            return Concatenation( "https://", answers.GitHub_username,
+                                  ".github.io/", answers.GitHub_reponame );
+        end,
+        isVisible := answers -> answers.GitHub
+    ),
+    rec(
+        key := "PackageWWWHome",
+        kind := "string",
+        prompt := "URL of package homepage?",
+        normalize := function( answers, value )
+            if value = "" then
+                return "https://TODO";
+            fi;
+            return value;
+        end,
+        isVisible := answers -> not answers.GitHub
+    ),
+    rec(
+        key := "kernel_extension",
+        kind := "choice",
+        prompt := "Shall your package provide a GAP kernel extension?",
+        choices := [ [ "No", "" ],
+                     [ "Yes, written in C", "C" ],
+                     [ "Yes, written in C++", "C++" ] ]
+    )
+] );
 
 BindGlobal( "PkgAuthorRecs", function()
     local pers, pkgname, pkg, u, p, k, name;
@@ -161,97 +456,14 @@ BindGlobal( "PkgAuthorRecs", function()
     return u;
 end );
 
-InstallGlobalFunction( PackageWizardInput, function()
-    local answers, create_repo, p, github, alphanum, kernel,
-        pers, name, key, q, tmp;
+BindGlobal( "PKGMKR_AskPersons", function()
+    local answers, pers, p, name, key, q, tmp;
 
-    answers := rec();
-
-    while true do
-        answers.PackageName :=
-          AskQuestion( "What is the name of the package?"
-                       : isValid := IsValidIdentifier );
-        if IsValidIdentifier( answers.PackageName ) then
-            break;
-        fi;
-        Print("Sorry, the package name must be a valid identifier (non-empty, only letters and digits, not a number, not a keyword)\n");
-    od;
-    if IsExistingFile( answers.PackageName ) then
-        Print("ERROR: A file or directory with this name already exists.\n");
-        Print("Please move it away or choose another package name.");
-        return fail;
-    fi;
-
-    answers.Subtitle :=
-      AskQuestion( "Enter a short (one sentence) description of your package:"
-                   : isValid := g -> Length( g ) < 80 );
-    answers.Version := "0.1";
-    answers.Date := Today();
-
-    github := rec();
-    create_repo :=
-      AskYesNoQuestion( "Shall I prepare your new package for GitHub?"
-                        : default := true );
-    answers.GitHub := create_repo;
-
-    if create_repo then
-        alphanum := "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-
-        # Try to get github username from git config
-        tmp := PKGMKR_CommandOutput( DirectoryCurrent(),
-                                     "git",
-                                     [ "config", "github.user" ] );
-        if tmp <> fail then
-            tmp := Chomp(tmp);
-        fi;
-
-        # TODO: just always do this??
-        github.ci := AskYesNoQuestion(
-            "Do you want to use GitHub Actions for automated tests and making releases?"
-            : default := true);
-        answers.GitHubPagesForGAP := github.ci;
-
-        Print("I need to know the URL of the GitHub repository.\n");
-        Print("It is of the form https://github.com/USER/REPOS.\n");
-        github.username := AskQuestion("What is USER (typically your GitHub username)?"
-                            : isValid := n -> Length(n) > 0 and n[1] <> '-' and
-                                    ForAll(n, c -> c = '-' or c in alphanum),
-                              default := tmp);
-        github.reponame := AskQuestion("What is REPOS, the repository name?"
-                            : default := answers.PackageName,
-                              isValid := n -> Length(n) > 0 and
-                                    ForAll(n, c -> c in "-._" or c in alphanum));
-        answers.GitHub_username := github.username;
-        answers.GitHub_reponame := github.reponame;
-        answers.PackageWWWHome :=
-          Concatenation( "https://", github.username,
-                         ".github.io/", github.reponame );
-
-    else
-        answers.GitHubPagesForGAP := false;
-        answers.PackageWWWHome := AskQuestion("URL of package homepage?");
-        if answers.PackageWWWHome = "" then
-            answers.PackageWWWHome := "https://TODO";
-        fi;
-    fi;
-
-    kernel := AskAlternativesQuestion("Shall your package provide a GAP kernel extension?",
-                    [
-                      [ "No", fail ],
-                      [ "Yes, written in C", "C" ],
-                      [ "Yes, written in C++", "C++" ],
-                    ] );
-    if kernel = fail then
-        answers.kernel_extension := "";
-    else
-        answers.kernel_extension := kernel;
-    fi;
-
+    answers := [];
     #
     # Package authors and maintainers
     #
     pers := PkgAuthorRecs();
-    answers.Persons := [];
     Print("\n");
     Print("Next I will ask you about the package authors and maintainers.\n\n");
     repeat
@@ -290,8 +502,24 @@ InstallGlobalFunction( PackageWizardInput, function()
             fi;
         od;
 
-        Add(answers.Persons, p);
+        Add( answers, p );
     until false = AskYesNoQuestion("Add another person?" : default := false);
+
+    return answers;
+end );
+
+InstallGlobalFunction( PackageWizardInput, function()
+    local answers;
+
+    answers := rec(
+        Version := "0.1",
+        Date := Today()
+    );
+
+    PKGMKR_AskQuestions( PKGMKR_InputSpecification,
+                         PKGMKR_DefaultInputUI(),
+                         answers );
+    answers.Persons := PKGMKR_AskPersons();
 
     return answers;
 end );

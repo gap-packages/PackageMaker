@@ -1,7 +1,13 @@
 gap> START_TEST( "PackageMaker: template.tst" );
 
 #
-gap> pkginfo := NormalizePackageWizardAnswers( PKGMKR_DemoPackageAnswers() ).pkginfo;;
+gap> pkginfo := NormalizePackageWizardAnswers( PKGMKR_DemoPackageAnswers() );;
+gap> pkginfo.GitHub;
+true
+gap> pkginfo.PackageURLs = fail;
+false
+gap> pkginfo.AvailabilityTest;
+"ReturnTrue"
 gap> tmpdir := Filename( DirectoryTemporary(), "packagemaker-template-tst" );;
 gap> if IsDirectoryPath( tmpdir ) then RemoveDirectoryRecursively( tmpdir ); fi;
 gap> AUTODOC_CreateDirIfMissing( tmpdir );

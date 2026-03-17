@@ -125,96 +125,81 @@ BindGlobal( "TranslateTemplate", function (template, outfile, subst)
 end );
 
 BindGlobal( "NormalizePackageWizardAnswers", function( answers )
-    local pkginfo, create_repo, github, alphanum, kernel, package_www_home;
+    local normalized, create_repo, kernel, package_www_home, check;
 
     if not IsRecord( answers ) then
         Error( "PackageWizardGenerate expects a record as input" );
     fi;
 
-    if not IsBound( answers.PackageName )
-       or not IsString( answers.PackageName )
-       or not IsValidIdentifier( answers.PackageName ) then
-        Error( "PackageName must be a valid identifier" );
+    if not IsBound( answers.PackageName ) or not IsString( answers.PackageName ) then
+        Error( "PackageName must be a string" );
     fi;
-    if IsExistingFile( answers.PackageName ) then
-        Error( "A file or directory with this name already exists: ",
-               answers.PackageName );
+    check := PKGMKR_CheckPackageName( answers, answers.PackageName );
+    if check <> true then
+        Error( check );
     fi;
 
-    pkginfo := rec();
-    pkginfo.PackageName := answers.PackageName;
+    normalized := ShallowCopy( answers );
 
-    if IsBound( answers.Subtitle ) then
-        pkginfo.Subtitle := answers.Subtitle;
-    else
-        pkginfo.Subtitle := "";
+    if not IsBound( normalized.Subtitle ) then
+        normalized.Subtitle := "";
     fi;
 
-    if IsBound( answers.Version ) then
-        pkginfo.Version := answers.Version;
-    else
-        pkginfo.Version := "0.1";
+    if not IsBound( normalized.Version ) then
+        normalized.Version := "0.1";
     fi;
 
-    if IsBound( answers.Date ) then
-        pkginfo.Date := answers.Date;
-    else
-        pkginfo.Date := Today();
+    if not IsBound( normalized.Date ) then
+        normalized.Date := Today();
     fi;
 
-    if IsBound( answers.Persons ) then
-        pkginfo.Persons := answers.Persons;
-    else
-        pkginfo.Persons := [];
+    if not IsBound( normalized.Persons ) then
+        normalized.Persons := [];
     fi;
 
     create_repo := IsBound( answers.GitHub ) and answers.GitHub = true;
-    github := rec();
+    normalized.GitHub := create_repo;
 
     if create_repo then
-        alphanum :=
-          "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-
-        if not IsBound( answers.GitHub_username )
-           or not IsString( answers.GitHub_username )
-           or Length( answers.GitHub_username ) = 0
-           or answers.GitHub_username[1] = '-'
-           or not ForAll( answers.GitHub_username,
-                           c -> c = '-' or c in alphanum ) then
-            Error( "GitHub_username must be a valid GitHub user or organization name" );
+        if not IsBound( normalized.GitHub_username )
+           or not IsString( normalized.GitHub_username ) then
+            Error( "GitHub_username must be a string" );
         fi;
-        if not IsBound( answers.GitHub_reponame )
-           or not IsString( answers.GitHub_reponame )
-           or Length( answers.GitHub_reponame ) = 0
-           or not ForAll( answers.GitHub_reponame,
-                           c -> c in "-._" or c in alphanum ) then
-            Error( "GitHub_reponame must be a valid GitHub repository name" );
+        check := PKGMKR_CheckGitHubUsername( normalized, normalized.GitHub_username );
+        if check <> true then
+            Error( check );
+        fi;
+        if not IsBound( normalized.GitHub_reponame )
+           or not IsString( normalized.GitHub_reponame ) then
+            Error( "GitHub_reponame must be a string" );
+        fi;
+        check := PKGMKR_CheckRepositoryName( normalized, normalized.GitHub_reponame );
+        if check <> true then
+            Error( check );
         fi;
 
-        github.username := answers.GitHub_username;
-        github.reponame := answers.GitHub_reponame;
-        github.ci := not IsBound( answers.GitHubPagesForGAP )
-                     or answers.GitHubPagesForGAP = true;
+        normalized.GitHubActions := not IsBound( normalized.GitHubActions )
+                                    or normalized.GitHubActions = true;
 
-        if IsBound( answers.PackageWWWHome ) and answers.PackageWWWHome <> "" then
-            package_www_home := answers.PackageWWWHome;
+        if IsBound( normalized.PackageWWWHome ) and normalized.PackageWWWHome <> "" then
+            package_www_home := normalized.PackageWWWHome;
         else
             package_www_home :=
-              Concatenation( "https://", github.username,
-                             ".github.io/", github.reponame );
+              Concatenation( "https://", normalized.GitHub_username,
+                             ".github.io/", normalized.GitHub_reponame );
         fi;
         if package_www_home[Length( package_www_home )] <> '/' then
             Add( package_www_home, '/' );
         fi;
-        pkginfo.PackageWWWHome := package_www_home;
+        normalized.PackageWWWHome := package_www_home;
 
-        pkginfo.PackageURLs := Concatenation("""
+        normalized.PackageURLs := Concatenation("""
 SourceRepository := rec(
     Type := "git",
-    URL := "https://github.com/""", github.username, "/", github.reponame, "\"", """,
+    URL := "https://github.com/""", normalized.GitHub_username, "/", normalized.GitHub_reponame, "\"", """,
 ),
 IssueTrackerURL := Concatenation( ~.SourceRepository.URL, "/issues" ),
-PackageWWWHome  := """, "\"", pkginfo.PackageWWWHome, "\"", """,
+PackageWWWHome  := """, "\"", normalized.PackageWWWHome, "\"", """,
 PackageInfoURL  := Concatenation( ~.PackageWWWHome, "PackageInfo.g" ),
 README_URL      := Concatenation( ~.PackageWWWHome, "README.md" ),
 ArchiveURL      := Concatenation( ~.SourceRepository.URL,
@@ -223,20 +208,22 @@ ArchiveURL      := Concatenation( ~.SourceRepository.URL,
 """);
 
     else
-        if IsBound( answers.PackageWWWHome ) and answers.PackageWWWHome <> "" then
-            pkginfo.PackageWWWHome := answers.PackageWWWHome;
+        normalized.GitHubActions := false;
+
+        if IsBound( normalized.PackageWWWHome ) and normalized.PackageWWWHome <> "" then
+            normalized.PackageWWWHome := normalized.PackageWWWHome;
         else
-            pkginfo.PackageWWWHome := "https://TODO";
+            normalized.PackageWWWHome := "https://TODO";
         fi;
 
-        if pkginfo.PackageWWWHome[Length( pkginfo.PackageWWWHome )] <> '/' then
-            Add( pkginfo.PackageWWWHome, '/' );
+        if normalized.PackageWWWHome[Length( normalized.PackageWWWHome )] <> '/' then
+            Add( normalized.PackageWWWHome, '/' );
         fi;
 
-        pkginfo.PackageURLs := Concatenation("""
+        normalized.PackageURLs := Concatenation("""
 #SourceRepository := rec( Type := "TODO", URL := "URL" ),
 #IssueTrackerURL := "TODO",
-PackageWWWHome := """, "\"", pkginfo.PackageWWWHome, "\"", """,
+PackageWWWHome := """, "\"", normalized.PackageWWWHome, "\"", """,
 PackageInfoURL := Concatenation( ~.PackageWWWHome, "PackageInfo.g" ),
 README_URL     := Concatenation( ~.PackageWWWHome, "README.md" ),
 ArchiveURL     := Concatenation( ~.PackageWWWHome,
@@ -244,31 +231,32 @@ ArchiveURL     := Concatenation( ~.PackageWWWHome,
 """);
     fi;
 
-    if not IsBound( answers.kernel_extension )
-       or answers.kernel_extension = ""
-       or answers.kernel_extension = fail then
-        kernel := fail;
-    elif answers.kernel_extension = "C"
-         or answers.kernel_extension = "C++" then
-        kernel := answers.kernel_extension;
+    if not IsBound( normalized.kernel_extension )
+       or normalized.kernel_extension = ""
+       or normalized.kernel_extension = fail then
+        kernel := "";
+    elif normalized.kernel_extension = "C"
+         or normalized.kernel_extension = "C++" then
+        kernel := normalized.kernel_extension;
     else
         Error( "kernel_extension must be one of \"\", \"C\", or \"C++\"" );
     fi;
+    normalized.kernel_extension := kernel;
 
-    if kernel <> fail then
-        pkginfo.KERNEL_EXT_INIT_G := StripBeginEnd("""
+    if kernel <> "" then
+        normalized.KERNEL_EXT_INIT_G := StripBeginEnd("""
 if not LoadKernelExtension("{{PackageName}}") then
   Error("failed to load kernel module of package {{PackageName}}");
 fi;
 """, "\n");
 
         if kernel = "C++" then
-            pkginfo.KERNEL_EXT_LANG_EXT := "cc";
+            normalized.KERNEL_EXT_LANG_EXT := "cc";
         else
-            pkginfo.KERNEL_EXT_LANG_EXT := "c";
+            normalized.KERNEL_EXT_LANG_EXT := "c";
         fi;
 
-        pkginfo.AvailabilityTest := StripBeginEnd("""
+        normalized.AvailabilityTest := StripBeginEnd("""
 function()
   if not IsKernelExtensionAvailable("{{PackageName}}") then
     LogPackageLoadingMessage(PACKAGE_WARNING,
@@ -279,16 +267,12 @@ function()
 end
 """, "\n");
     else
-        pkginfo.KERNEL_EXT_INIT_G := "";
-        pkginfo.KERNEL_EXT_LANG_EXT := "";
-        pkginfo.AvailabilityTest := "ReturnTrue";
+        normalized.KERNEL_EXT_INIT_G := "";
+        normalized.KERNEL_EXT_LANG_EXT := "";
+        normalized.AvailabilityTest := "ReturnTrue";
     fi;
 
-    return rec(
-        create_repo := create_repo,
-        github := github,
-        kernel := kernel,
-        pkginfo := pkginfo );
+    return normalized;
 end );
 
 BindGlobal( "CreateGitRepository", function(dir, github)
@@ -338,13 +322,11 @@ BindGlobal( "CreateGitRepository", function(dir, github)
 end );
 
 InstallGlobalFunction( PackageWizardGenerate, function( answers )
-    local data, pkginfo, create_repo, kernel, github, dir;
+    local pkginfo, create_repo, kernel, dir;
 
-    data := NormalizePackageWizardAnswers( answers );
-    pkginfo := data.pkginfo;
-    create_repo := data.create_repo;
-    kernel := data.kernel;
-    github := data.github;
+    pkginfo := NormalizePackageWizardAnswers( answers );
+    create_repo := pkginfo.GitHub;
+    kernel := pkginfo.kernel_extension;
 
     if not AUTODOC_CreateDirIfMissing( pkginfo.PackageName ) then
         Error("Failed to create package directory");
@@ -368,7 +350,7 @@ InstallGlobalFunction( PackageWizardGenerate, function( answers )
     fi;
     TranslateTemplate(fail, "tst/testall.g", pkginfo );
 
-    if kernel <> fail then
+    if kernel <> "" then
         # create a simple kernel extension with a build system
 
         TranslateTemplate(fail, "Makefile.in", pkginfo );
@@ -386,7 +368,7 @@ InstallGlobalFunction( PackageWizardGenerate, function( answers )
         fi;
     fi;
 
-    if IsBound(github.ci) and github.ci then
+    if pkginfo.GitHubActions then
         if not AUTODOC_CreateDirIfMissing( Concatenation( pkginfo.PackageName, "/.github" ) ) then
             Error("Failed to create `.github' directory in package directory");
         fi;
@@ -411,6 +393,9 @@ InstallGlobalFunction( PackageWizardGenerate, function( answers )
             Error(dir, " is not a directory");
         fi;
 
-        CreateGitRepository(dir, github);
+        CreateGitRepository(
+            dir,
+            rec( username := pkginfo.GitHub_username,
+                 reponame := pkginfo.GitHub_reponame ) );
     fi;
 end );
