@@ -12,7 +12,7 @@ PackageName := "{{PackageName}}",
 Subtitle := "{{Subtitle}}",
 Version := "{{Version}}",
 Date := "{{Date}}", # dd/mm/yyyy format
-License := "GPL-2.0-or-later",
+License := "{{License}}",
 
 Persons := {{Persons}},
 {{PackageURLs}}
@@ -43,5 +43,3 @@ TestFile := "tst/testall.g",
 #Keywords := [ "TODO" ],
 
 ));
-
-

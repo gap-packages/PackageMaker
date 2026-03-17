@@ -311,6 +311,15 @@ BindGlobal( "PKGMKR_CheckRepositoryName", function( answers, value )
         "characters or '-', '.', '_', and must not start with '-'." );
 end );
 
+BindGlobal( "PKGMKR_LicenseChoices", [
+    [ "GPL 2 or later (default; used by GAP itself and many packages)",
+      "GPL-2.0-or-later" ],
+    [ "GPL 3 or later", "GPL-3.0-or-later" ],
+    [ "MIT", "MIT" ],
+    [ "BSD 3-Clause", "BSD-3-Clause" ],
+    [ "custom (you will fill in the license text yourself)", "custom" ]
+] );
+
 BindGlobal( "PKGMKR_InputSpecification", [
     rec(
         key := "Welcome",
@@ -333,6 +342,17 @@ BindGlobal( "PKGMKR_InputSpecification", [
         kind := "string",
         prompt := "Enter a short (one sentence) description of your package:",
         validate := PKGMKR_ValidateSubtitle
+    ),
+    rec(
+        key := "License",
+        kind := "choice",
+        prompt := [
+            "Which license should the package use?",
+            "GAP itself and many GAP packages use GPL-2.0-or-later,",
+            "so that is the default."
+        ],
+        choices := PKGMKR_LicenseChoices,
+        default := 1
     ),
     rec(
         key := "GitHub",

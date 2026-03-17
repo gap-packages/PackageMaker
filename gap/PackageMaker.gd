@@ -43,6 +43,24 @@
 #! set them up, lets you retry, or keeps the generated package
 #! directory without creating a git repository.
 
+#! @Section Choosing a license
+#! The wizard asks you to choose a license for the generated package.
+#! By default, it uses <C>GPL-2.0-or-later</C>, because that is the
+#! license of &GAP; itself and also used by many &GAP; packages.
+#! However, you may also choose other licenses such as
+#! <C>GPL-3.0-or-later</C>, <C>MIT</C>, or <C>BSD-3-Clause</C>.
+#!
+#! If you are unsure which license to use, then the following sites may help:
+#! - <URL>https://choosealicense.com/</URL>
+#! - <URL>https://opensource.org/licenses/</URL>
+#! - <URL>https://spdx.org/licenses/</URL>
+#!
+#! If you choose the custom option, then &PackageMaker; generates a
+#! placeholder <F>LICENSE</F> file which you must replace with the full
+#! text of your chosen license. You should also make sure that the
+#! <C>License</C> field in <F>PackageInfo.g</F> and the package
+#! <F>README.md</F> describe the same license.
+
 #! @Description
 #! Interactively create a package skeleton. You can abort by either
 #! answering <Q>quit</Q> or pressing <C>Ctrl-D</C>

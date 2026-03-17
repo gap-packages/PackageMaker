@@ -1,0 +1,14 @@
+This is a placeholder for the license of {{PackageName}}.
+
+Please replace this placeholder with the full text of your chosen license.
+After doing so, make sure that:
+
+- the `License` entry in `PackageInfo.g` uses the identifier you want;
+- this README describes the same license; and
+- the chosen license is suitable for distributing your package.
+
+Useful starting points:
+
+- https://choosealicense.com/
+- https://opensource.org/licenses/
+- https://spdx.org/licenses/

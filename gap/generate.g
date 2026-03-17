@@ -1,11 +1,20 @@
+# `DirectoriesPackageLibrary` gives us a package directory relative to the
+# current working directory. Generation and tests change the working
+# directory, so we freeze the templates directory to an absolute path at
+# package load time.
+BindGlobal( "PKGMKR_TEMPLATE_DIR",
+    Directory( Chomp( PKGMKR_CommandOutput(
+        DirectoriesPackageLibrary( "PackageMaker", "templates" )[1],
+        "pwd",
+        [ ] ) ) ) );
+
 BindGlobal( "CopyTemplate", function (template, outfile, subst)
     local out_stream, in_stream, line, pos, end_pos, key, val, i, tmp, c;
 
-    tmp := DirectoriesPackageLibrary( "PackageMaker", "templates" );
     if template = fail then
-        template := Filename( tmp, outfile );
+        template := Filename( PKGMKR_TEMPLATE_DIR, outfile );
     else
-        template := Filename( tmp, template );
+        template := Filename( PKGMKR_TEMPLATE_DIR, template );
     fi;
     outfile := Concatenation( subst.PackageName, "/", outfile );
 
@@ -28,11 +37,10 @@ end);
 BindGlobal( "TranslateTemplate", function (template, outfile, subst)
     local out_stream, in_stream, line, pos, end_pos, key, val, i, tmp, c;
 
-    tmp := DirectoriesPackageLibrary( "PackageMaker", "templates" );
     if template = fail then
-        template := Filename( tmp, outfile );
+        template := Filename( PKGMKR_TEMPLATE_DIR, outfile );
     else
-        template := Filename( tmp, template );
+        template := Filename( PKGMKR_TEMPLATE_DIR, template );
     fi;
     outfile := Concatenation( subst.PackageName, "/", outfile );
 
@@ -124,6 +132,81 @@ BindGlobal( "TranslateTemplate", function (template, outfile, subst)
     CloseStream(in_stream);
 end );
 
+BindGlobal( "PKGMKR_LicenseTemplateName", function( license )
+    local template;
+
+    template := Concatenation( "LICENSE.", license );
+    if IsExistingFile( Filename( PKGMKR_TEMPLATE_DIR, template ) ) then
+        return template;
+    fi;
+
+    Error( "Unsupported license ", license );
+end );
+
+BindGlobal( "PKGMKR_CopyrightYear", function( answers )
+    local parts;
+
+    if not IsBound( answers.Date ) or not IsString( answers.Date ) then
+        return "";
+    fi;
+
+    parts := SplitString( answers.Date, "/" );
+    if Length( parts ) <> 3 then
+        return "";
+    fi;
+
+    return parts[3];
+end );
+
+BindGlobal( "PKGMKR_PersonDisplayName", function( person )
+    local names;
+
+    names := [ ];
+    if IsBound( person.FirstNames ) and person.FirstNames <> "" then
+        Add( names, person.FirstNames );
+    fi;
+    if IsBound( person.LastName ) and person.LastName <> "" then
+        Add( names, person.LastName );
+    fi;
+    if Length( names ) = 0 then
+        return fail;
+    fi;
+
+    return JoinStringsWithSeparator( names, " " );
+end );
+
+BindGlobal( "PKGMKR_CopyrightHolders", function( answers )
+    local names, name;
+
+    if not IsBound( answers.Persons ) then
+        return "{{copyright holders}}";
+    fi;
+
+    names := [ ];
+    for name in List( answers.Persons, PKGMKR_PersonDisplayName ) do
+        if name <> fail and not name in names then
+            Add( names, name );
+        fi;
+    od;
+
+    if Length( names ) = 0 then
+        return "{{copyright holders}}";
+    elif Length( names ) = 1 then
+        return names[1];
+    fi;
+
+    return Concatenation(
+        JoinStringsWithSeparator( names{[1..Length(names)-1]}, ", " ),
+        ", and ",
+        names[Length(names)] );
+end );
+
+BindGlobal( "PKGMKR_ReadmeLicenseGuidance", function( license )
+    local template;
+    template := Concatenation( PKGMKR_LicenseTemplateName( license ), ".guidance" );
+    return StringFile( Filename( PKGMKR_TEMPLATE_DIR, template ) );
+end );
+
 BindGlobal( "NormalizePackageWizardAnswers", function( answers )
     local normalized, create_repo, kernel, package_www_home, check;
 
@@ -156,6 +239,15 @@ BindGlobal( "NormalizePackageWizardAnswers", function( answers )
     if not IsBound( normalized.Persons ) then
         normalized.Persons := [];
     fi;
+
+    if not IsBound( normalized.License ) then
+        normalized.License := "GPL-2.0-or-later";
+    fi;
+    normalized.LicenseTemplate := PKGMKR_LicenseTemplateName( normalized.License );
+    normalized.CopyrightYear := PKGMKR_CopyrightYear( normalized );
+    normalized.CopyrightHolders := PKGMKR_CopyrightHolders( normalized );
+    normalized.README_LICENSE_GUIDANCE :=
+      PKGMKR_ReadmeLicenseGuidance( normalized.License );
 
     create_repo := IsBound( answers.GitHub ) and answers.GitHub = true;
     normalized.GitHub := create_repo;
@@ -363,7 +455,7 @@ InstallGlobalFunction( PackageWizardGenerate, function( answers )
     fi;
 
     TranslateTemplate(fail, "README.md", pkginfo );
-    TranslateTemplate(fail, "LICENSE", pkginfo );
+    TranslateTemplate(pkginfo.LicenseTemplate, "LICENSE", pkginfo );
     TranslateTemplate("PackageInfo.g.in", "PackageInfo.g", pkginfo );
     TranslateTemplate(fail, "init.g", pkginfo );
     TranslateTemplate(fail, "read.g", pkginfo );
