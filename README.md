@@ -30,6 +30,11 @@ You can use it as follows:
    creates a new directory for the new package and populates it with all the
    files needed for a basic package.
 
+   If you also ask PackageMaker to create a git repository, make sure git has
+   `user.name` and `user.email` configured. If they are missing, PackageMaker
+   will show the commands to run, let you retry, or keep the generated package
+   directory without creating a git repository.
+
 5. Move the newly created package directory to a suitable place.
 
 > Note: The `PackageWizard` function generates your new package in the current
