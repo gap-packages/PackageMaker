@@ -6,6 +6,11 @@
 PackageMaker is a [GAP](https://www.gap-system.org/) package that makes
 it easy and convenient to create new GAP packages.
 
+It provides an interactive wizard that creates a usable package
+skeleton and, depending on your choices, can also set up a git
+repository, GitHub workflows, code coverage configuration, and a simple
+kernel extension build system.
+
 You can use it as follows:
 
 1. Download PackageMaker and extract it into a GAP `pkg` directory. Or
@@ -13,7 +18,9 @@ You can use it as follows:
 
         git clone https://github.com/gap-packages/PackageMaker
 
-   Alternatively you could install PackageMaker using the [PackageManager](https://github.com/gap-packages/PackageManager) GAP package by entering these commands in GAP:
+   Alternatively you could install PackageMaker using the
+   [PackageManager](https://github.com/gap-packages/PackageManager)
+   GAP package by entering these commands in GAP:
 
         LoadPackage("PackageManager");
         InstallPackage("https://github.com/gap-packages/PackageMaker");
@@ -27,30 +34,39 @@ You can use it as follows:
         PackageWizard();
 
 4. Answer the questions about your new package. Afterwards, PackageMaker
-   creates a new directory for the new package and populates it with all the
-   files needed for a basic package.
+   creates a new directory for the new package and populates it with the
+   files needed for a basic package skeleton.
 
    If you also ask PackageMaker to create a git repository, make sure git has
    `user.name` and `user.email` configured. If they are missing, PackageMaker
    will show the commands to run, let you retry, or keep the generated package
    directory without creating a git repository.
 
-5. Move the newly created package directory to a suitable place.
+5. Edit the generated files, especially `README.md` and `PackageInfo.g`,
+   then move the newly created package directory to a suitable place.
 
-> Note: The `PackageWizard` function generates your new package in the current
-> directory. For GAP to be able to load your new package, it must be in one of
-> the GAP's package search directories. For example, inside the `pkg`
-> directory of your GAP installation, or inside a directory `~/.gap/pkg` in
-> your home directory. If your package is not already in one of these
-> locations, either move it there; or instruct GAP to search in the current
-> directory for packages, e.g. by running it via `gap --packagedirs .` from
-> command line (requires at least GAP 4.15).
+> Note: `PackageWizard()` creates the new package in the current directory.
+> The recommended long-term location is usually `~/.gap/pkg` (which you may
+> have to create first). For quick testing on GAP 4.15 or newer, `gap
+> --packagedirs .` can also be useful. See the manual section “Where should
+> the generated package go?” for the details and the older-GAP alternatives.
 
-Or just start GAP inside the `pkg` directory.
+## Manual and next steps
 
-Next, you may wish to learn more about the purpose of the various
-generated files as well as the the meaning and correct usage of the
-entries in the `PackageInfo.g` file. Some relevant places for that:
+The package manual contains a fuller walkthrough of the wizard, including a
+worked transcript, an explanation of the important wizard choices, a tour of
+the generated files, and a checklist of what to edit next.
+
+Two practical points are easy to miss:
+
+- `PackageWizard()` creates the new package in the current directory.
+- The generated package is only a starting point: it still contains TODO
+  text and placeholder values that you should replace before publishing
+  or releasing the package.
+
+If you want more background on the purpose of the generated files and on
+the meaning of the entries in `PackageInfo.g`, these references are also
+useful:
 
 - the GAP manual chapter on ["Using and Developing GAP Packages"](https://docs.gap-system.org/doc/ref/chap76_mj.html).
 - the [manual of the `Example`](https://gap-packages.github.io/example/doc/chap0_mj.html)
