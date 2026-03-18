@@ -1,14 +1,16 @@
-BindGlobal( "PKGMKR_TemplatesDir", function()
-    return DirectoriesPackageLibrary( "PackageMaker", "templates" );
+BindGlobal( "PKGMKR_FindTemplate", function( template )
+    local dir;
+    dir := DirectoriesPackageLibrary( "PackageMaker", "templates" );
+    return Filename( dir, template);
 end );
 
 BindGlobal( "CopyTemplate", function (template, outfile, subst)
     local out_stream, in_stream, line, pos, end_pos, key, val, i, tmp, c;
 
     if template = fail then
-        template := Filename( PKGMKR_TemplatesDir(), outfile );
+        template := PKGMKR_FindTemplate( outfile );
     else
-        template := Filename( PKGMKR_TemplatesDir(), template );
+        template := PKGMKR_FindTemplate( template );
     fi;
     outfile := Concatenation( subst.PackageName, "/", outfile );
 
@@ -32,9 +34,9 @@ BindGlobal( "TranslateTemplate", function (template, outfile, subst)
     local out_stream, in_stream, line, pos, end_pos, key, val, i, tmp, c;
 
     if template = fail then
-        template := Filename( PKGMKR_TemplatesDir(), outfile );
+        template := PKGMKR_FindTemplate( outfile );
     else
-        template := Filename( PKGMKR_TemplatesDir(), template );
+        template := PKGMKR_FindTemplate( template );
     fi;
     outfile := Concatenation( subst.PackageName, "/", outfile );
 
@@ -187,7 +189,7 @@ end );
 BindGlobal( "PKGMKR_ReadmeLicenseGuidance", function( license )
     local template;
     template := Concatenation( "LICENSE.", license, ".guidance" );
-    return StringFile( Filename( PKGMKR_TemplatesDir(), template ) );
+    return StringFile( PKGMKR_FindTemplate( template ) );
 end );
 
 BindGlobal( "NormalizePackageWizardAnswers", function( answers )
