@@ -61,7 +61,7 @@ true
 gap> CopyTemplate( fail, ".github/workflows/CI.yml", pkginfo );;
 gap> StringFile( Filename( Directory( Concatenation( pkginfo.PackageName, "/.github/workflows" ) ),
 >                         "CI.yml" ) ) =
->   StringFile( Filename( PKGMKR_TEMPLATE_DIR, ".github/workflows/CI.yml" ) );
+>   StringFile( Filename( PKGMKR_TemplatesDir(), ".github/workflows/CI.yml" ) );
 true
 gap> ChangeDirectoryCurrent( olddir );;
 gap> RemoveDirectoryRecursively( tmpdir );;

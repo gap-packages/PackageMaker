@@ -1,20 +1,14 @@
-# `DirectoriesPackageLibrary` gives us a package directory relative to the
-# current working directory. Generation and tests change the working
-# directory, so we freeze the templates directory to an absolute path at
-# package load time.
-BindGlobal( "PKGMKR_TEMPLATE_DIR",
-    Directory( Chomp( PKGMKR_CommandOutput(
-        DirectoriesPackageLibrary( "PackageMaker", "templates" )[1],
-        "pwd",
-        [ ] ) ) ) );
+BindGlobal( "PKGMKR_TemplatesDir", function()
+    return DirectoriesPackageLibrary( "PackageMaker", "templates" );
+end );
 
 BindGlobal( "CopyTemplate", function (template, outfile, subst)
     local out_stream, in_stream, line, pos, end_pos, key, val, i, tmp, c;
 
     if template = fail then
-        template := Filename( PKGMKR_TEMPLATE_DIR, outfile );
+        template := Filename( PKGMKR_TemplatesDir(), outfile );
     else
-        template := Filename( PKGMKR_TEMPLATE_DIR, template );
+        template := Filename( PKGMKR_TemplatesDir(), template );
     fi;
     outfile := Concatenation( subst.PackageName, "/", outfile );
 
@@ -38,9 +32,9 @@ BindGlobal( "TranslateTemplate", function (template, outfile, subst)
     local out_stream, in_stream, line, pos, end_pos, key, val, i, tmp, c;
 
     if template = fail then
-        template := Filename( PKGMKR_TEMPLATE_DIR, outfile );
+        template := Filename( PKGMKR_TemplatesDir(), outfile );
     else
-        template := Filename( PKGMKR_TEMPLATE_DIR, template );
+        template := Filename( PKGMKR_TemplatesDir(), template );
     fi;
     outfile := Concatenation( subst.PackageName, "/", outfile );
 
@@ -132,17 +126,6 @@ BindGlobal( "TranslateTemplate", function (template, outfile, subst)
     CloseStream(in_stream);
 end );
 
-BindGlobal( "PKGMKR_LicenseTemplateName", function( license )
-    local template;
-
-    template := Concatenation( "LICENSE.", license );
-    if IsExistingFile( Filename( PKGMKR_TEMPLATE_DIR, template ) ) then
-        return template;
-    fi;
-
-    Error( "Unsupported license ", license );
-end );
-
 BindGlobal( "PKGMKR_CopyrightYear", function( answers )
     local parts;
 
@@ -203,8 +186,8 @@ end );
 
 BindGlobal( "PKGMKR_ReadmeLicenseGuidance", function( license )
     local template;
-    template := Concatenation( PKGMKR_LicenseTemplateName( license ), ".guidance" );
-    return StringFile( Filename( PKGMKR_TEMPLATE_DIR, template ) );
+    template := Concatenation( "LICENSE.", license, ".guidance" );
+    return StringFile( Filename( PKGMKR_TemplatesDir(), template ) );
 end );
 
 BindGlobal( "NormalizePackageWizardAnswers", function( answers )
@@ -243,7 +226,7 @@ BindGlobal( "NormalizePackageWizardAnswers", function( answers )
     if not IsBound( normalized.License ) then
         normalized.License := "GPL-2.0-or-later";
     fi;
-    normalized.LicenseTemplate := PKGMKR_LicenseTemplateName( normalized.License );
+    normalized.LicenseTemplate := Concatenation( "LICENSE.", normalized.License );
     normalized.CopyrightYear := PKGMKR_CopyrightYear( normalized );
     normalized.CopyrightHolders := PKGMKR_CopyrightHolders( normalized );
     normalized.README_LICENSE_GUIDANCE :=
