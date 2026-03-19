@@ -250,8 +250,8 @@ end );
 BindGlobal( "PKGMKR_DefaultGitHubUsername", function( answers )
     local tmp;
 
-    tmp := PKGMKR_CommandOutput( DirectoryCurrent(), "git",
-                                 [ "config", "github.user" ] );
+    tmp := PKGMKR_CommandOutput( DirectoryCurrent(), "gh",
+                                 [ "api", "user", "--jq", ".login" ] );
     if tmp <> fail then
         return Chomp( tmp );
     fi;
