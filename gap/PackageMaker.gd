@@ -61,6 +61,7 @@
 #! generated package directory without creating a git repository.
 #!
 #! @Section Where should the generated package go?
+#! @SectionLabel PackageDestination
 #! The generated package directory must eventually live in a place where
 #! &GAP; searches for packages.
 #!
@@ -231,7 +232,7 @@ DeclareGlobalFunction( "PackageWizard" );
 #! @Section What next?
 #! Once the wizard has finished, a typical next-step checklist is:
 #! - decide where the package should live, as explained in
-#!   <Ref Label="Chapter_PackageMaker_Section_Where_should_the_generated_package_go?"/>;
+#!   <Ref Sect="Section_PackageDestination"/>;
 #! - edit <F>README.md</F> and replace the TODO sections;
 #! - review <F>PackageInfo.g</F> and fix any remaining placeholder values;
 #! - if you selected the custom license option, replace the placeholder
