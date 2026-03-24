@@ -1,0 +1,375 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+<title>GAP (PackageMaker) - Chapter 1: PackageMaker</title>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<meta name="generator" content="GAPDoc2HTML" />
+<link rel="stylesheet" type="text/css" href="manual.css" />
+<script src="manual.js" type="text/javascript"></script>
+<script type="text/javascript">overwriteStyle();</script>
+</head>
+<body class="chap1"  onload="jscontent()">
+
+
+<div class="chlinktop"><span class="chlink1">Goto Chapter: </span><a href="chap0.html">Top</a>  <a href="chap1.html">1</a>  <a href="chapInd.html">Ind</a>  </div>
+
+<div class="chlinkprevnexttop">&nbsp;<a href="chap0.html">[Top of Book]</a>&nbsp;  <a href="chap0.html#contents">[Contents]</a>&nbsp;  &nbsp;<a href="chap0.html">[Previous Chapter]</a>&nbsp;  &nbsp;<a href="chapInd.html">[Next Chapter]</a>&nbsp;  </div>
+
+<p id="mathjaxlink" class="pcenter"><a href="chap1_mj.html">[MathJax on]</a></p>
+<p><a id="X80AC704D873187E3" name="X80AC704D873187E3"></a></p>
+<div class="ChapSects"><a href="chap1.html#X80AC704D873187E3">1 <span class="Heading">PackageMaker</span></a>
+<div class="ContSect"><span class="tocline"><span class="nocss">&nbsp;</span><a href="chap1.html#X78E9A6927A4E1FBD">1.1 <span class="Heading">What is <strong class="pkg">PackageMaker</strong>?</span></a>
+</span>
+</div>
+<div class="ContSect"><span class="tocline"><span class="nocss">&nbsp;</span><a href="chap1.html#X7E730E5A7DD77A50">1.2 <span class="Heading">Before you start</span></a>
+</span>
+</div>
+<div class="ContSect"><span class="tocline"><span class="nocss">&nbsp;</span><a href="chap1.html#X7BB8C09C87932665">1.3 <span class="Heading">Where should the generated package go?</span></a>
+</span>
+</div>
+<div class="ContSect"><span class="tocline"><span class="nocss">&nbsp;</span><a href="chap1.html#X858C9C7F832B9C2C">1.4 <span class="Heading">A worked example</span></a>
+</span>
+<div class="ContSSBlock">
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap1.html#X7ECA3E578388AD9A">1.4-1 PackageWizardInput</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap1.html#X86E254658700A465">1.4-2 PackageWizardGenerate</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap1.html#X7B19742884A7E49C">1.4-3 PackageWizard</a></span>
+</div></div>
+<div class="ContSect"><span class="tocline"><span class="nocss">&nbsp;</span><a href="chap1.html#X87B127887E7D3B43">1.5 <span class="Heading">Important wizard choices</span></a>
+</span>
+<div class="ContSSBlock">
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap1.html#X7B45A0267CB58132">1.5-1 <span class="Heading">Package name</span></a>
+</span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap1.html#X861E5DF986F89AE2">1.5-2 <span class="Heading">License</span></a>
+</span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap1.html#X812040BA822BCC79">1.5-3 <span class="Heading">GiHub setup</span></a>
+</span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap1.html#X857DC0D182FFA23F">1.5-4 <span class="Heading">Kernel extension</span></a>
+</span>
+</div></div>
+<div class="ContSect"><span class="tocline"><span class="nocss">&nbsp;</span><a href="chap1.html#X7D674D9B85B3F6C3">1.6 <span class="Heading">What gets generated?</span></a>
+</span>
+</div>
+<div class="ContSect"><span class="tocline"><span class="nocss">&nbsp;</span><a href="chap1.html#X868D9A7B7BAAE5D3">1.7 <span class="Heading">What next?</span></a>
+</span>
+</div>
+</div>
+
+<h3>1 <span class="Heading">PackageMaker</span></h3>
+
+<p><a id="X78E9A6927A4E1FBD" name="X78E9A6927A4E1FBD"></a></p>
+
+<h4>1.1 <span class="Heading">What is <strong class="pkg">PackageMaker</strong>?</span></h4>
+
+<p><strong class="pkg">PackageMaker</strong> is a <strong class="pkg">GAP</strong> package that makes it easy to create new <strong class="pkg">GAP</strong> packages, by providing a <q>wizard</q> function that asks a few questions about the new package, such as its name and authors; and from that creates a complete usable skeleton package. It optionally can set up several advanced features, including:</p>
+
+
+<ul>
+<li><p>a git repository for use on GitHub;</p>
+
+</li>
+<li><p>a simple C or C++ kernel extension, including a build system;</p>
+
+</li>
+<li><p>continuous integration and release automation using GitHub Actions;</p>
+
+</li>
+<li><p>code coverage tracking;</p>
+
+</li>
+<li><p>... and more.</p>
+
+</li>
+</ul>
+<p>The generated package is meant as a starting point, not as a finished package ready for release. In particular, you should expect to edit <code class="file">README.md</code>, <code class="file">PackageInfo.g</code>, the generated tests and, depending on your choices, the documentation, CI workflows or kernel extension sources.</p>
+
+<p><a id="X7E730E5A7DD77A50" name="X7E730E5A7DD77A50"></a></p>
+
+<h4>1.2 <span class="Heading">Before you start</span></h4>
+
+<p>A typical session looks like this:</p>
+
+
+<ul>
+<li><p>start <strong class="pkg">GAP</strong> in a directory where it is OK to create a new package directory;</p>
+
+</li>
+<li><p>load <strong class="pkg">PackageMaker</strong> and run <code class="code">PackageWizard()</code>;</p>
+
+</li>
+<li><p>answer the wizard questions;</p>
+
+</li>
+<li><p>inspect and edit the generated files;</p>
+
+</li>
+<li><p>move the package to a directory in which <strong class="pkg">GAP</strong> looks for packages, or run <strong class="pkg">GAP</strong> with <code class="code">--packagedirs</code>.</p>
+
+</li>
+</ul>
+<p>By default, the wizard creates the new package directory in the current working directory of your <strong class="pkg">GAP</strong> session. That is often convenient for creating the package, but it does not automatically make the package loadable. See the next section for the different ways to make <strong class="pkg">GAP</strong> find the generated package.</p>
+
+<p>If you ask <strong class="pkg">PackageMaker</strong> to create a git repository, git should have <code class="code">user.name</code> and <code class="code">user.email</code> configured. If they are missing, <strong class="pkg">PackageMaker</strong> explains how to set them up, lets you retry, or keeps the generated package directory without creating a git repository.</p>
+
+<p><a id="X7BB8C09C87932665" name="X7BB8C09C87932665"></a></p>
+
+<h4>1.3 <span class="Heading">Where should the generated package go?</span></h4>
+
+<p>The generated package directory must eventually live in a place where <strong class="pkg">GAP</strong> searches for packages.</p>
+
+<p>For normal day-to-day use, the best destination is usually <code class="file">~/.gap/pkg</code>. You may have to create that directory first. Keeping personal packages there means they survive <strong class="pkg">GAP</strong> upgrades and are separate from the main <strong class="pkg">GAP</strong> installation.</p>
+
+<p>Another natural choice is the <code class="file">pkg</code> directory inside your main <strong class="pkg">GAP</strong> installation. This is common when you built <strong class="pkg">GAP</strong> from source in a directory that you control. The drawback is that when you later upgrade or reinstall <strong class="pkg">GAP</strong>, it is easy to forget to copy over packages that you added there manually.</p>
+
+<p>For quick testing, <strong class="pkg">GAP</strong> 4.15 or later can be started with <code class="code">gap --packagedirs .</code> to tell <strong class="pkg">GAP</strong> to search the current directory directly for packages.</p>
+
+<p>There are also more advanced alternatives:</p>
+
+
+<ul>
+<li><p>command line options such as <code class="code">-l</code> (see <a href="https://docs.gap-system.org/doc/ref/chap3.html#X782751D5858A6EAF"><span class="RefLink">Reference: Command Line Options</span></a>) can change the configured <strong class="pkg">GAP</strong> root directories (see <a href="https://docs.gap-system.org/doc/ref/chap9.html#X7A4973627A5DB27D"><span class="RefLink">Reference: GAP Root Directories</span></a>) when starting <strong class="pkg">GAP</strong>;</p>
+
+</li>
+<li><p><code class="func">ExtendRootDirectories</code> (<a href="https://docs.gap-system.org/doc/ref/chap76.html#X7CD0A2F27D19BA03"><span class="RefLink">Reference: ExtendRootDirectories</span></a>) and <code class="func">ExtendPackageDirectories</code> (<a href="https://docs.gap-system.org/doc/ref/chap76.html#X81BFC5C87EE2E02A"><span class="RefLink">Reference: ExtendPackageDirectories</span></a>) can add package search locations after <strong class="pkg">GAP</strong> has already started;</p>
+
+</li>
+<li><p><code class="func">SetPackagePath</code> (<a href="https://docs.gap-system.org/doc/ref/chap76.html#X858E8985840BFA72"><span class="RefLink">Reference: SetPackagePath</span></a>) can be useful when you want to force loading one particular package from a specific path for a session.</p>
+
+</li>
+</ul>
+<p>These advanced options are useful to know about, but for most users the practical advice is simple: keep the package in <code class="file">~/.gap/pkg</code> for normal use, and use <code class="code">gap --packagedirs .</code> only as a quick-testing convenience when running <strong class="pkg">GAP</strong> 4.15 or newer.</p>
+
+<p><a id="X858C9C7F832B9C2C" name="X858C9C7F832B9C2C"></a></p>
+
+<h4>1.4 <span class="Heading">A worked example</span></h4>
+
+<p>The following transcript shows a complete example session. It uses GitHub, enables the generated workflows, chooses the MIT license, creates a C kernel extension, and enters one author / maintainer record.</p>
+
+<p><a id="X7ECA3E578388AD9A" name="X7ECA3E578388AD9A"></a></p>
+
+<h5>1.4-1 PackageWizardInput</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; PackageWizardInput</code>( <var class="Arg">arg</var> )</td><td class="tdright">(&nbsp;function&nbsp;)</td></tr></table></div>
+<p>Interactively create a package skeleton. You can abort by either answering <q>quit</q> or pressing <code class="code">Ctrl-D</code>.</p>
+
+
+<div class="example"><pre>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">PackageWizard();</span>
+Welcome to the GAP PackageMaker Wizard.
+I will now guide you step-by-step through the package
+creation process by asking you some questions.
+
+What is the name of the package? DemoPackage
+Enter a short (one sentence) description of your package: A package used to demonstrate PackageMaker
+Which license should the package use? MIT
+Shall I prepare your new package for GitHub? [Y/n] y
+Do you want to use GitHub Actions for automated tests and making releases? [Y/n] y
+The release workflow updates the package website on GitHub Pages
+whenever you make a package release.
+I need to know the URL of the GitHub repository.
+It is of the form https://github.com/USER/REPOS.
+What is USER (typically your GitHub username)? demo-user
+What is REPOS, the repository name? DemoPackage
+Shall your package provide a GAP kernel extension? Yes, written in C
+
+Next I will ask you about the package authors and maintainers.
+
+Last name? Doe
+First name(s)? Dana
+Is this one of the package authors? [Y/n] y
+Is this a package maintainer? [Y/n] y
+Email? dana@example.invalid
+WWWHome? https://example.invalid/~dana/
+GitHubUsername? demo-user
+PostalAddress? Example Institute\nDepartment of Algebra\nExample Street 1\n12345 Example City
+Place? Example City, Country
+Institution? Example Institute
+Add another person? [y/N] n
+Creating the git repository...
+Initialized empty Git repository in .../DemoPackage/.git/
+[main (root-commit) ...] initial import
+Done creating git repository.
+Create &lt;https://github.com/demo-user/DemoPackage&gt; via &lt;https://github.com/new&gt; and then run:
+  git push -u origin main
+</pre></div>
+
+<p>After this finishes, the new package lives in a directory named <code class="file">DemoPackage</code> below the current directory. You can now inspect and edit the generated files, move the package into a package directory, and try loading it in <strong class="pkg">GAP</strong>.</p>
+
+<p><a id="X86E254658700A465" name="X86E254658700A465"></a></p>
+
+<h5>1.4-2 PackageWizardGenerate</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; PackageWizardGenerate</code>( <var class="Arg">arg</var> )</td><td class="tdright">(&nbsp;function&nbsp;)</td></tr></table></div>
+<p><a id="X7B19742884A7E49C" name="X7B19742884A7E49C"></a></p>
+
+<h5>1.4-3 PackageWizard</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; PackageWizard</code>( <var class="Arg">arg</var> )</td><td class="tdright">(&nbsp;function&nbsp;)</td></tr></table></div>
+<p><a id="X87B127887E7D3B43" name="X87B127887E7D3B43"></a></p>
+
+<h4>1.5 <span class="Heading">Important wizard choices</span></h4>
+
+<p>Some answers mainly affect metadata, while others determine which files are generated.</p>
+
+<p><a id="X7B45A0267CB58132" name="X7B45A0267CB58132"></a></p>
+
+<h5>1.5-1 <span class="Heading">Package name</span></h5>
+
+<p>The package name becomes the name of the top-level package directory and is also used in file names such as <code class="file">gap/YourPackage.gd</code>, <code class="file">gap/YourPackage.gi</code> and in many entries of <code class="file">PackageInfo.g</code>. It therefore should be chosen with care.</p>
+
+<p><a id="X861E5DF986F89AE2" name="X861E5DF986F89AE2"></a></p>
+
+<h5>1.5-2 <span class="Heading">License</span></h5>
+
+<p>The license choice affects both the generated <code class="file">LICENSE</code> file and the guidance inserted into <code class="file">README.md</code>. By default, the wizard uses <code class="code">GPL-2.0-or-later</code>, because that is the license of <strong class="pkg">GAP</strong> itself and is also used by many <strong class="pkg">GAP</strong> packages. Other built-in choices are <code class="code">GPL-3.0-or-later</code>, <code class="code">MIT</code> and <code class="code">BSD-3-Clause</code>.</p>
+
+<p>If you are unsure which license to use, then the following sites may help:</p>
+
+
+<ul>
+<li><p><span class="URL"><a href="https://choosealicense.com/">https://choosealicense.com/</a></span></p>
+
+</li>
+<li><p><span class="URL"><a href="https://opensource.org/licenses/">https://opensource.org/licenses/</a></span></p>
+
+</li>
+<li><p><span class="URL"><a href="https://spdx.org/licenses/">https://spdx.org/licenses/</a></span></p>
+
+</li>
+</ul>
+<p>If you choose the custom option, then <strong class="pkg">PackageMaker</strong> generates a placeholder <code class="file">LICENSE</code> file which you must replace with the full text of your chosen license. You should also make sure that the <code class="code">License</code> field in <code class="file">PackageInfo.g</code> and the package <code class="file">README.md</code> describe the same license.</p>
+
+<p><a id="X812040BA822BCC79" name="X812040BA822BCC79"></a></p>
+
+<h5>1.5-3 <span class="Heading">GiHub setup</span></h5>
+
+<p>Saying yes to GitHub setup does two things:</p>
+
+
+<ul>
+<li><p>it fills in repository-related URLs in <code class="file">PackageInfo.g</code>;</p>
+
+</li>
+<li><p>it offers to create a local git repository with an initial commit and a GitHub remote named <code class="code">origin</code>.</p>
+
+</li>
+</ul>
+<p>If you also enable GitHub Actions, then <strong class="pkg">PackageMaker</strong> adds CI and release workflows below <code class="file">.github/workflows/</code> and creates <code class="file">.codecov.yml</code>. The release workflow updates the package website on GitHub Pages when you make a release.</p>
+
+<p>If you do not use GitHub setup, then <code class="file">PackageInfo.g</code> contains placeholder URL entries instead. They work as reminders, but you should replace them before publishing your package.</p>
+
+<p><a id="X857DC0D182FFA23F" name="X857DC0D182FFA23F"></a></p>
+
+<h5>1.5-4 <span class="Heading">Kernel extension</span></h5>
+
+<p>The kernel extension choice determines whether the package is purely interpreted <strong class="pkg">GAP</strong> code or also contains code in <code class="code">C</code> or <code class="code">C++</code>. Choosing a kernel extension adds files such as <code class="file">src/YourPackage.c</code> or <code class="file">src/YourPackage.cc</code>, together with <code class="file">configure</code>, <code class="file">Makefile.in</code> and <code class="file">Makefile.gappkg</code>.</p>
+
+<p><a id="X7D674D9B85B3F6C3" name="X7D674D9B85B3F6C3"></a></p>
+
+<h4>1.6 <span class="Heading">What gets generated?</span></h4>
+
+<p>Every generated package contains the basic files needed for a small but usable package:</p>
+
+
+<ul>
+<li><p><code class="file">PackageInfo.g</code> with the package metadata;</p>
+
+</li>
+<li><p><code class="file">README.md</code> with placeholder text to replace;</p>
+
+</li>
+<li><p><code class="file">init.g</code> and <code class="file">read.g</code>;</p>
+
+</li>
+<li><p><code class="file">gap/YourPackage.gd</code> and <code class="file">gap/YourPackage.gi</code>;</p>
+
+</li>
+<li><p><code class="file">makedoc.g</code> for building the package manual;</p>
+
+</li>
+<li><p><code class="file">tst/testall.g</code> as a starting point for tests;</p>
+
+</li>
+<li><p><code class="file">LICENSE</code>.</p>
+
+</li>
+</ul>
+<p>Depending on your choices, the wizard may also create:</p>
+
+
+<ul>
+<li><p><code class="file">.gitattributes</code> and <code class="file">.gitignore</code> when GitHub setup is enabled;</p>
+
+</li>
+<li><p><code class="file">.github/workflows/CI.yml</code>, <code class="file">.github/workflows/release.yml</code> and <code class="file">.codecov.yml</code> when GitHub Actions are enabled;</p>
+
+</li>
+<li><p><code class="file">src/</code>, <code class="file">configure</code>, <code class="file">Makefile.in</code> and <code class="file">Makefile.gappkg</code> when a kernel extension is requested.</p>
+
+</li>
+</ul>
+<p>A few of these files deserve immediate attention:</p>
+
+
+<ul>
+<li><p><code class="file">README.md</code> still contains TODO text and should be rewritten;</p>
+
+</li>
+<li><p><code class="file">PackageInfo.g</code> should be checked carefully, especially the package URLs, description, authors and maintainers;</p>
+
+</li>
+<li><p><code class="file">tst/testall.g</code> is only the test driver, so you will usually want to add actual <code class="code">.tst</code> files;</p>
+
+</li>
+<li><p>the generated <code class="file">gap/</code> and optional <code class="file">src/</code> files are only a starting skeleton and should be adapted to your package.</p>
+
+</li>
+</ul>
+<p><a id="X868D9A7B7BAAE5D3" name="X868D9A7B7BAAE5D3"></a></p>
+
+<h4>1.7 <span class="Heading">What next?</span></h4>
+
+<p>Once the wizard has finished, a typical next-step checklist is:</p>
+
+
+<ul>
+<li><p>decide where the package should live, as explained in <a href="chap1.html#X7BB8C09C87932665"><span class="RefLink">1.3</span></a>;</p>
+
+</li>
+<li><p>edit <code class="file">README.md</code> and replace the TODO sections;</p>
+
+</li>
+<li><p>review <code class="file">PackageInfo.g</code> and fix any remaining placeholder values;</p>
+
+</li>
+<li><p>if you selected the custom license option, replace the placeholder <code class="file">LICENSE</code> text with the full license text;</p>
+
+</li>
+<li><p>add package code and tests;</p>
+
+</li>
+<li><p>run the package inside <strong class="pkg">GAP</strong> and make sure it loads;</p>
+
+</li>
+<li><p>if you asked for a kernel extension, run <code class="code">./configure</code> and build it;</p>
+
+</li>
+<li><p>if you enabled GitHub setup, create the GitHub repository and push the generated initial commit.</p>
+
+</li>
+</ul>
+<p>For broader guidance on package structure and release preparation, it is worth reading the <strong class="pkg">GAP</strong> manual chapter on <a href="https://docs.gap-system.org/doc/ref/chap76.html#X79F76C1E834BFDCC"><span class="RefLink">Reference: Using and Developing GAP Packages</span></a> as well as the manual and <code class="file">PackageInfo.g</code> file of the <span class="URL"><a href="https://github.com/gap-packages/example">https://github.com/gap-packages/example</a></span> package.</p>
+
+
+<div class="chlinkprevnextbot">&nbsp;<a href="chap0.html">[Top of Book]</a>&nbsp;  <a href="chap0.html#contents">[Contents]</a>&nbsp;  &nbsp;<a href="chap0.html">[Previous Chapter]</a>&nbsp;  &nbsp;<a href="chapInd.html">[Next Chapter]</a>&nbsp;  </div>
+
+
+<div class="chlinkbot"><span class="chlink1">Goto Chapter: </span><a href="chap0.html">Top</a>  <a href="chap1.html">1</a>  <a href="chapInd.html">Ind</a>  </div>
+
+<hr />
+<p class="foot">generated by <a href="https://www.math.rwth-aachen.de/~Frank.Luebeck/GAPDoc">GAPDoc2HTML</a></p>
+</body>
+</html>
