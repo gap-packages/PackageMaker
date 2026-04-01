@@ -484,6 +484,7 @@ InstallGlobalFunction( PackageWizardGenerate, function( answers )
         fi;
         TranslateTemplate(fail, ".codecov.yml", pkginfo );
         CopyTemplate(fail, ".github/workflows/CI.yml", pkginfo);
+        CopyTemplate(fail, ".github/workflows/docs.yml", pkginfo);
         CopyTemplate(fail, ".github/workflows/release.yml", pkginfo);
     fi;
 
