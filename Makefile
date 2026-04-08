@@ -1,7 +1,7 @@
 .PHONY: doc html regen check
 
 GAP ?= gap
-GAP_ARGS = -q --quitonbreak --packagedirs $(abspath ..)
+GAP_ARGS = -q --quitonbreak --packagedirs $(abspath .)
 
 doc:
 	$(GAP) $(GAP_ARGS) makedoc.g -c 'QUIT;'
