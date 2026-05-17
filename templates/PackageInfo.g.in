@@ -40,6 +40,4 @@ AvailabilityTest := {{AvailabilityTest}},
 
 TestFile := "tst/testall.g",
 
-#Keywords := [ "TODO" ],
-
 ));
