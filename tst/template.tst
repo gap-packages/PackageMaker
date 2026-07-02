@@ -21,7 +21,7 @@ gap> tmpdir := Filename( DirectoryTemporary(), "packagemaker-template-tst" );;
 gap> if IsDirectoryPath( tmpdir ) then RemoveDirectoryRecursively( tmpdir ); fi;
 gap> AUTODOC_CreateDirIfMissing( tmpdir );
 true
-gap> olddir := AUTODOC_CurrentDirectory();;
+gap> olddir := PKGMKR_CurrentDirectory();;
 gap> ChangeDirectoryCurrent( tmpdir );;
 gap> AUTODOC_CreateDirIfMissing( pkginfo.PackageName );
 true

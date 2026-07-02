@@ -35,6 +35,19 @@ BindGlobal( "PKGMKR_ExpectedDir", function( name )
                      Concatenation( "tst/", name, ".expected" ) );
 end );
 
+BindGlobal( "PKGMKR_CurrentDirectory",
+function(args...)
+    local pwd, result, out;
+    pwd := Filename( DirectoriesSystemPrograms(), "pwd" );
+    if pwd = fail then
+        Error("failed to locate 'pwd' tool");
+    fi;
+    result := "";
+    out := OutputTextString( result, true );
+    Process( DirectoryCurrent(), pwd, InputTextNone(), out, []) ;
+    return Chomp( result );
+end );
+
 BindGlobal( "PKGMKR_GenerateFixture", function( name, answers )
     local tempdir, olddir, actualdir;
 
@@ -45,7 +58,7 @@ BindGlobal( "PKGMKR_GenerateFixture", function( name, answers )
     fi;
     AUTODOC_CreateDirIfMissing( tempdir );
 
-    olddir := AUTODOC_CurrentDirectory();
+    olddir := PKGMKR_CurrentDirectory();
     ChangeDirectoryCurrent( tempdir );
     PackageWizardGenerate( answers : skipGitRepositorySetup := true );
     ChangeDirectoryCurrent( olddir );
