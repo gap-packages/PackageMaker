@@ -61,7 +61,7 @@ PackageDoc := rec(
 ),
 
 Dependencies := rec(
-  GAP := ">= 4.9",
+  GAP := ">= 4.13",
   NeededOtherPackages := [
       [ "AutoDoc", ">= 2018.02.14" ],
       [ "io", ">= 3.0" ],       # for IO_gettimeofday
