@@ -1,4 +1,4 @@
-This file describes changes in the {{PackageName}} package.
+This file describes changes in the DemoPackage package.
 
 ## Unreleased
   - Fix bug in ...

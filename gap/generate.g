@@ -440,6 +440,7 @@ InstallGlobalFunction( PackageWizardGenerate, function( answers )
     fi;
 
     TranslateTemplate(fail, "README.md", pkginfo );
+    TranslateTemplate(fail, "CHANGES.md", pkginfo );
     TranslateTemplate(pkginfo.LicenseTemplate, "LICENSE", pkginfo );
     TranslateTemplate("PackageInfo.g.in", "PackageInfo.g", pkginfo );
     TranslateTemplate(fail, "init.g", pkginfo );
