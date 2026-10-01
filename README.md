@@ -23,7 +23,7 @@ You can use it as follows:
    GAP package by entering these commands in GAP:
 
         LoadPackage("PackageManager");
-        InstallPackage("https://github.com/gap-packages/PackageMaker");
+        InstallPackage("https://github.com/gap-packages/PackageMaker.git");
 
 2. Start GAP, load the PackageMaker package:
 
