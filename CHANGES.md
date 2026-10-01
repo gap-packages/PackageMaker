@@ -3,7 +3,7 @@ This file describes changes in the PackageMaker package.
 ## Unreleased
 
   - The generated `/doc/title.xml` is ignored 
-  - A `CHANGES.md` is scaffold.
+  - Add `CHANGES.md` to package scaffold.
 
 ## 1.0.2 (2026-07-13)
 
