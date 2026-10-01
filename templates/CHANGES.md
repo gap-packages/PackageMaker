@@ -1,8 +1,8 @@
 This file describes changes in the {{PackageName}} package.
 
-X.Y (YYYY-MM-DD)
+## X.Y.Z (TBD)
   - Fix bug in ...
   - ...
 
-0.1 (YYYY-MM-DD)
+## 1.0.0 (YYYY-MM-DD)
   - Initial release
