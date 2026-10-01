@@ -1,7 +1,8 @@
 This file describes changes in the PackageMaker package.
 
-## 1.0.2 (TBD)
+## 1.0.3 (TBD)
   - The generated `/doc/title.xml` is ignored 
+  - A `CHANGES.md` is scaffold.
 
 ## 1.0.2 (2026-07-13)
   - Update the GitHub workflows to latest versions
