@@ -1,5 +1,8 @@
 This file describes changes in the PackageMaker package.
 
+## 1.0.2 (TBD)
+  - The generated `/doc/title.xml` is ignored 
+
 ## 1.0.2 (2026-07-13)
   - Update the GitHub workflows to latest versions
   - Stop suggesting to add `Keywords` in `PackageInfo.g` (nothing uses them)
